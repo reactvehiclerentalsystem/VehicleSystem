@@ -29,6 +29,7 @@ public class Vehicle {
 	private double dailyPrice;
 	private boolean isAvailable; //specifies availability of vehicle!
 
+	//mapping with the vehicleBrand
 	@ManyToOne
 	@JsonBackReference
 	@JoinColumn(name = "brand_id", referencedColumnName = "brand_id")
