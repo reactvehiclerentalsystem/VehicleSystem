@@ -27,7 +27,7 @@ public class Vehicle {
 	private String vehicleLocation;
 	private int numberOfSeats;
 	private double dailyPrice;
-	private boolean isAvailable;
+	private boolean isAvailable; //specifies availability of vehicle!
 
 	@ManyToOne
 	@JsonBackReference
