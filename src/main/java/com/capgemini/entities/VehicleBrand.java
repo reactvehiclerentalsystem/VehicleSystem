@@ -17,7 +17,6 @@ public class VehicleBrand {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int brand_id;
-
 	private String brand_name;
 
 	@OneToMany(mappedBy = "vehicleBrand")

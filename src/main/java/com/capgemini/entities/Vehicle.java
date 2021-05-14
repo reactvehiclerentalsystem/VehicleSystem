@@ -28,8 +28,8 @@ public class Vehicle {
 	private int numberOfSeats;
 	private double dailyPrice;
 	private boolean isAvailable; //specifies availability of vehicle!
+	private boolean isDeleted;
 
-	//mapping with the vehicleBrand
 	@ManyToOne
 	@JsonBackReference
 	@JoinColumn(name = "brand_id", referencedColumnName = "brand_id")

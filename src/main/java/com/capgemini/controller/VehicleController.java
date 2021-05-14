@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,14 +54,18 @@ public class VehicleController {
 
 	}
 
-	@DeleteMapping("/delete/{vehicleId}")
+	@PutMapping("/delete/{vehicleId}")
 	public String removeVehicle(@PathVariable int vehicleId) throws VehicleIdNotFoundException {
 
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
 
-		if (vehicle != null) {
-			vehicleRepository.delete(vehicle);// if vehicle is is present it will get deleted , hence
-												// cancelled.
+		if (vehicle != null && vehicle.isDeleted() == false) // if vehicle id is present and vehicle status is not
+																// deleted then the method will get accessed.
+		{
+
+			vehicle.setDeleted(true);
+			vehicleRepository.save(vehicle);// if vehicle is is present it will get deleted , hence
+											// cancelled.
 			return "Booking Cancelled!";
 		} else {
 			throw new VehicleIdNotFoundException("Incorrect Id! Enter correct Id!");
@@ -114,18 +117,4 @@ public class VehicleController {
 		return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
 	}
 
-	/*
-	 * @PutMapping("brand/{brand_id}/vehicle/{vehicleId}") public String
-	 * assignBrandToVehicle(@PathVariable int brand_id, @PathVariable int vehicleId)
-	 * {
-	 * 
-	 * VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
-	 * Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
-	 * 
-	 * vehicle.setVehicleBrand(vehicleBrand);
-	 * 
-	 * // updated. vehicleRepository.save(vehicle); return "Brand Added";
-	 * 
-	 * }
-	 */
 }
