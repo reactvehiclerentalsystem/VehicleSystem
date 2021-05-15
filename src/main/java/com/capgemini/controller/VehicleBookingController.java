@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.entities.UserInfo;
 import com.capgemini.entities.Vehicle;
 import com.capgemini.entities.VehicleBooking;
 import com.capgemini.exception.VehicleIdNotFoundException;
+import com.capgemini.repository.UserInfoRepository;
 import com.capgemini.repository.VehicleBookingRepository;
 import com.capgemini.repository.VehicleRepository;
 
@@ -27,16 +29,20 @@ public class VehicleBookingController {
 	private VehicleBookingRepository vehicleBookingRepository;
 	@Autowired
 	private VehicleRepository vehicleRepository;
+	@Autowired
+	private UserInfoRepository userInfoRepository;
 
-	@PostMapping("/book/vehicle{vehicleId}")
-	public String bookVehicle(@RequestBody VehicleBooking vehicleBooking, @PathVariable int vehicleId)
+	@PostMapping("/book/vehicle{vehicleId}/user/{userId}")
+	public String bookVehicle(@RequestBody VehicleBooking vehicleBooking, @PathVariable int vehicleId,@PathVariable int userId)
 			throws VehicleIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
-
-		if (vehicle != null) {
+		UserInfo userInfo=userInfoRepository.findById(userId).get();
+		if (vehicle != null && userInfo.isDeleted()==false) {
 
 			vehicle.setAvailable(false); // this will set the availability of vehicle to other users as booked.
-
+			
+			vehicleBooking.setUserInfo(userInfo); //this will set userInfo in vehicleBooking.
+			
 			vehicleBooking.setVehicle(vehicle);// this will save the selected vehicle with booking user.
 
 			vehicleBookingRepository.save(vehicleBooking);// it will get the vehicle booked for the user.

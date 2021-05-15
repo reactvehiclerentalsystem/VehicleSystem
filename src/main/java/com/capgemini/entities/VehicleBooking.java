@@ -24,9 +24,9 @@ public class VehicleBooking {
 	@JoinColumn(name = "vehicleId", referencedColumnName = "vehicleId")
 	private Vehicle vehicle;
 	
-	/*
+	
 	@OneToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
-	private User user;
-	*/
+	@JoinColumn(name = "userId", referencedColumnName = "userId")
+	private UserInfo userInfo;
+	
 }

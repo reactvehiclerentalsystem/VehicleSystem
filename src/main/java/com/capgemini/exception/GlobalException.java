@@ -23,4 +23,8 @@ public class GlobalException {
 	public ResponseEntity<String> handleException(VehicleIdNotFoundException e) {
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
+	@ExceptionHandler(value = UserIdNotFoundException.class)
+	public ResponseEntity<String> handleException(UserIdNotFoundException e) {
+		return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+	}
 }

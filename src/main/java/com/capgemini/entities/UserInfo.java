@@ -14,16 +14,20 @@ public class UserInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
-	private int id;
+	private int userId;
 	
-	private String name;
+	private String userName;
 	
-	private String number;
+	private String userNumber;
 	
-	private String email;
+	private String userEmail;
 	
-	private String password;
+	private String userPassword;
 	
-	private String adhaar;
+	private String userAdhaar;
+	
+	private String testimonial;
+	
+	private boolean isDeleted;
 	
 }
