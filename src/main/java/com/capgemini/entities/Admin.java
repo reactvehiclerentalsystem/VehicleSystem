@@ -1,6 +1,5 @@
 package com.capgemini.entities;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,9 +15,9 @@ public class Admin {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, unique = true)
 	private int admin_id;
+	@Column(unique = true)
 	private String email;
 	private String password;
-	//admin is created by bharath
-	
+	private String dataEntryPerson;
 
 }
