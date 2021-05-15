@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.entities.Admin;
+import com.capgemini.entities.ContactUs;
 import com.capgemini.entities.Vehicle;
 import com.capgemini.entities.VehicleBooking;
 import com.capgemini.entities.VehicleBrand;
 import com.capgemini.exception.VehicleIdNotFoundException;
 import com.capgemini.repository.AdminRepository;
+import com.capgemini.repository.ContactUsRepository;
 import com.capgemini.repository.VehicleBookingRepository;
 import com.capgemini.repository.VehicleBrandRepository;
 import com.capgemini.repository.VehicleRepository;
@@ -34,6 +36,9 @@ public class AdminController {
 
 	@Autowired
 	private VehicleBrandRepository vehicleBrandRepository;
+	
+	@Autowired
+	private ContactUsRepository contactUsRepo;
 
 	@PostMapping("/createadmin/")
 	public String create(@RequestBody Admin admin) {
@@ -135,6 +140,16 @@ public class AdminController {
 	public String deleteVehicleBrand(@PathVariable int brand_id) {
 		vehicleBrandRepository.deleteById(brand_id);
 		return "Vehicle Brand is Deleted";
+	}
+	
+	@PutMapping("/updatecontact/{contactId}/email/{email}/mobile/{mobile}")
+	public String updateContactUs(@PathVariable int contactId,@PathVariable String email,@PathVariable String mobile) {
+		ContactUs contactUs=contactUsRepo.findById(contactId).get();
+		contactUs.setEmail(email);
+		contactUs.setMobile(mobile);
+		
+		contactUsRepo.save(contactUs);
+		return "Contact Us Updated";
 	}
 
 }
