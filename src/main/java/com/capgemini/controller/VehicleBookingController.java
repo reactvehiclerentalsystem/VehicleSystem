@@ -29,7 +29,8 @@ public class VehicleBookingController {
 	private VehicleRepository vehicleRepository;
 
 	@PostMapping("/book/vehicle{vehicleId}")
-	public String bookVehicle(@RequestBody VehicleBooking vehicleBooking, @PathVariable int vehicleId) throws VehicleIdNotFoundException  {
+	public String bookVehicle(@RequestBody VehicleBooking vehicleBooking, @PathVariable int vehicleId)
+			throws VehicleIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
 
 		if (vehicle != null) {
@@ -50,7 +51,7 @@ public class VehicleBookingController {
 
 		VehicleBooking vehicleBooking = vehicleBookingRepository.findById(bookingId).get();
 
-		if (vehicleBooking != null && vehicleBooking.isCancelled()==false) {
+		if (vehicleBooking != null && vehicleBooking.isCancelled() == false) {
 			vehicleBooking.setCancelled(true);
 			vehicleBookingRepository.save(vehicleBooking);// if vehicle is is present it will get deleted , hence
 															// cancelled.

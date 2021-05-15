@@ -66,7 +66,7 @@ public class VehicleController {
 			vehicle.setDeleted(true);
 			vehicleRepository.save(vehicle);// if vehicle is is present it will get deleted , hence
 											// cancelled.
-			return "Booking Cancelled!";
+			return "Vehicle Deleted!";
 		} else {
 			throw new VehicleIdNotFoundException("Incorrect Id! Enter correct Id!");
 		}

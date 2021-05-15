@@ -1,5 +1,6 @@
 package com.capgemini.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,11 +21,13 @@ public class Vehicle {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int vehicleId;
+	@Column(length = 15,unique = true)
 	private String vehiclePlateNumber;
 	private String vehicleName;
 	private String vehicleType;
 	private String vehicleColor;
 	private String vehicleLocation;
+	@Column(length = 2)
 	private int numberOfSeats;
 	private double dailyPrice;
 	private boolean isAvailable; //specifies availability of vehicle!
