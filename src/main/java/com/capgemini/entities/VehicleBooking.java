@@ -19,7 +19,6 @@ public class VehicleBooking {
 	private String bookingStartDate;
 	private String bookingEndDate;
 	private boolean isCancelled;
-	private String dataEntryPerson;
 	
 	@OneToOne //(cascade=CascadeType.ALL)
 	@JoinColumn(name = "vehicleId", referencedColumnName = "vehicleId")

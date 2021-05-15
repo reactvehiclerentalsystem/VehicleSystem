@@ -18,7 +18,6 @@ public class VehicleBrand {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int brand_id;
 	private String brand_name;
-	private String dataEntryPerson;
 
 	@OneToMany(mappedBy = "vehicleBrand")
 	@JsonManagedReference
