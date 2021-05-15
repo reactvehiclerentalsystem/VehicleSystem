@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.entities.Admin;
 import com.capgemini.entities.ContactUs;
+import com.capgemini.entities.Queries;
 import com.capgemini.entities.Vehicle;
 import com.capgemini.entities.VehicleBooking;
 import com.capgemini.entities.VehicleBrand;
 import com.capgemini.exception.VehicleIdNotFoundException;
 import com.capgemini.repository.AdminRepository;
 import com.capgemini.repository.ContactUsRepository;
+import com.capgemini.repository.QueriesRepository;
 import com.capgemini.repository.VehicleBookingRepository;
 import com.capgemini.repository.VehicleBrandRepository;
 import com.capgemini.repository.VehicleRepository;
@@ -39,6 +41,9 @@ public class AdminController {
 	
 	@Autowired
 	private ContactUsRepository contactUsRepo;
+	
+	@Autowired
+	private QueriesRepository queriesRepository;
 
 	@PostMapping("/createadmin/")
 	public String create(@RequestBody Admin admin) {
@@ -150,6 +155,14 @@ public class AdminController {
 		
 		contactUsRepo.save(contactUs);
 		return "Contact Us Updated";
+	}
+	
+	@PutMapping("/update/querysatus/{queryId}")
+	public String postQuery(@PathVariable int queryId) {
+		Queries queries=queriesRepository.findById(queryId).get();
+		queries.setQueryStatus("Query Checked");
+		queriesRepository.save(queries);
+		return "Query Status Updated by Admin";
 	}
 
 }
