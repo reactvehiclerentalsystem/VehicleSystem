@@ -38,10 +38,14 @@ public class VehicleBookingController {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
 		UserInfo userInfo=userInfoRepository.findById(userId).get();
 		if (vehicle != null && userInfo.isDeleted()==false) {
+			
+			//vehicleBooking.setCancelled(false);
 
 			vehicle.setAvailable(false); // this will set the availability of vehicle to other users as booked.
 			
 			vehicleBooking.setUserInfo(userInfo); //this will set userInfo in vehicleBooking.
+			
+			vehicleBooking.setCancelled(false);
 			
 			vehicleBooking.setVehicle(vehicle);// this will save the selected vehicle with booking user.
 

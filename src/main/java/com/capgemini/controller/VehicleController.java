@@ -34,18 +34,29 @@ public class VehicleController {
 
 		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
 		vehicle.setVehicleBrand(vehicleBrand);
+		vehicle.setDeleted(false);
 
 		vehicleRepository.save(vehicle);
 		return "Vehicle Added";
 	}
 
-	@PutMapping("/update/{vehicleId}")
-	public String updateVehicle(@RequestBody Vehicle vehicle, @PathVariable int vehicleId)
+	@PutMapping("/update/{vehicleId}/brand/{brand_id}")
+	public String updateVehicle(@RequestBody Vehicle v, @PathVariable int vehicleId, @PathVariable int brand_id)
 			throws VehicleIdNotFoundException {
-		Vehicle vehicle1 = vehicleRepository.findById(vehicleId).get();
-		if (vehicle1 != null) {
-			vehicleRepository.save(vehicle1);// if vehicle is is present it will get
-			// deleted , hence cancelled. return "Vehicle data updated!";
+		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
+		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
+		if (vehicle != null) {
+			vehicle.setVehiclePlateNumber(v.getVehiclePlateNumber());
+			vehicle.setVehicleName(v.getVehicleName());
+			vehicle.setVehicleType(v.getVehicleType());
+			vehicle.setVehicleColor(v.getVehicleColor());
+			vehicle.setVehicleLocation(v.getVehicleLocation());
+			vehicle.setNumberOfSeats(v.getNumberOfSeats());
+			vehicle.setDailyPrice(v.getDailyPrice());
+			vehicle.setAvailable(true);
+			vehicle.setVehicleBrand(vehicleBrand);
+			vehicle.setDeleted(false);
+			vehicleRepository.save(vehicle);
 			return "Vehicle Updated!";
 		} else {
 
@@ -111,7 +122,7 @@ public class VehicleController {
 		return new ResponseEntity<Vehicle>(vehicle, HttpStatus.OK);
 	}
 
-	@GetMapping("/search/all")
+	@GetMapping("/search/allVehicles")
 	public ResponseEntity<List<Vehicle>> searchAllVehicle() {
 		List<Vehicle> vehicle = vehicleRepository.findAll();
 		return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);

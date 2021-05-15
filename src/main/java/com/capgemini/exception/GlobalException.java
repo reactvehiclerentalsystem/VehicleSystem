@@ -27,4 +27,16 @@ public class GlobalException {
 	public ResponseEntity<String> handleException(UserIdNotFoundException e) {
 		return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
 	}
+	@ExceptionHandler (value = VehicleAlreadyBookedException.class)
+	public ResponseEntity<String> handleException(VehicleAlreadyBookedException v){
+		return new ResponseEntity<String>(v.getMessage(),HttpStatus.NOT_FOUND);
+	}
+	@ExceptionHandler (value = VehicleAvailableException.class)
+	public ResponseEntity<String> handleException(VehicleAvailableException v){
+		return new ResponseEntity<String>(v.getMessage(),HttpStatus.NOT_FOUND);
+	}
+	@ExceptionHandler (value =QueryIdMismatchException.class)
+	public ResponseEntity<String> handleException(QueryIdMismatchException q){
+		return new ResponseEntity<String>(q.getMessage(),HttpStatus.NOT_FOUND);
+	}
 }

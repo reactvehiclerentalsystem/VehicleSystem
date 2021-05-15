@@ -3,7 +3,6 @@ package com.capgemini.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,10 +25,11 @@ public class UserInfoController {
 	@PostMapping("/")
 	public String create(@RequestBody UserInfo user) {
 		
+		user.setDeleted(false);
 		userInfoRepository.save(user);
 		return "added";
 	}
-	@GetMapping("/{id}")
+	@GetMapping("/user/{id}")
 	public ResponseEntity<UserInfo> findById(@PathVariable int id) throws UserIdNotFoundException {
 		if(userInfoRepository.existsById(id)) {
 			UserInfo userInfo=userInfoRepository.findById(id).get();
@@ -39,11 +39,14 @@ public class UserInfoController {
 		}
 	}
 	
-	@PutMapping("/update/{id}")
+	@PutMapping("/user/{id}")
 	public String update(@PathVariable int id, @RequestBody UserInfo ui) throws UserIdNotFoundException {
 		
 		UserInfo dbUser =  userInfoRepository.findById(id).get();
 		if(dbUser != null && dbUser.isDeleted()==false) {
+			dbUser.setUserName(ui.getUserName());
+			dbUser.setUserEmail(ui.getUserEmail());
+			dbUser.setDeleted(false);
 			userInfoRepository.save(dbUser);
 			return "User Profile Updated!!";
 		}
@@ -52,7 +55,7 @@ public class UserInfoController {
 		}
 	}
 	
-	@DeleteMapping("/{id}")
+	@PutMapping("/delete/{id}")
 	public String deleteRecord(@PathVariable int id) throws UserIdNotFoundException {
 		UserInfo userInfo=userInfoRepository.findById(id).get();
 		if(userInfo!=null && userInfo.isDeleted()==false) {
