@@ -21,7 +21,7 @@ public class UserInfo {
     private String userPassword;
 	@Column(unique = true, nullable = false)
 	private String userAdhaar;
-    private String testimonial;
+//    private String testimonial;
     private boolean isDeleted;
 
 }

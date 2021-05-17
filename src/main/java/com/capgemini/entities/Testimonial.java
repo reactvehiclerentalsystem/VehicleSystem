@@ -9,10 +9,10 @@ import lombok.Data;
 
 @Entity
 @Data
-public class GuestUser {
+public class Testimonial {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String name;
-	private String email;
+	private String testimonials;
+	private boolean testimonialStatus=false; //inActive
 }

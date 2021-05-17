@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.capgemini.entities.Testimonial;
 import com.capgemini.entities.UserInfo;
 import com.capgemini.exception.UserIdNotFoundException;
+import com.capgemini.repository.TestimonialRepository;
 import com.capgemini.repository.UserInfoRepository;
 
 @RestController
@@ -22,6 +23,8 @@ public class UserInfoController {
 	@Autowired
 	private UserInfoRepository userInfoRepository;
 	
+	@Autowired
+	private TestimonialRepository testimonialRepository;
 	@PostMapping("/")
 	public String create(@RequestBody UserInfo user) {
 		
@@ -65,5 +68,13 @@ public class UserInfoController {
 		}else {
 			throw new UserIdNotFoundException("User Id not found!");
 		}
+	}
+	
+	@PostMapping("/post/testimonial/{testimonials}")
+	public String postTestimonial(@PathVariable String testimonials) {
+		Testimonial testimonial=new Testimonial();
+		testimonial.setTestimonials(testimonials);
+		testimonialRepository.save(testimonial);
+		return "Testimonial posted by Registered user";
 	}
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.entities.Admin;
 import com.capgemini.entities.ContactUs;
 import com.capgemini.entities.Queries;
+import com.capgemini.entities.Testimonial;
 import com.capgemini.entities.UserInfo;
 import com.capgemini.entities.Vehicle;
 import com.capgemini.entities.VehicleBooking;
@@ -29,6 +30,7 @@ import com.capgemini.exception.VehicleIdNotFoundException;
 import com.capgemini.repository.AdminRepository;
 import com.capgemini.repository.ContactUsRepository;
 import com.capgemini.repository.QueriesRepository;
+import com.capgemini.repository.TestimonialRepository;
 import com.capgemini.repository.UserInfoRepository;
 import com.capgemini.repository.VehicleBookingRepository;
 import com.capgemini.repository.VehicleBrandRepository;
@@ -59,6 +61,9 @@ public class AdminController {
 	@Autowired
 	private UserInfoRepository userInfoRepository;
 
+	@Autowired
+	private TestimonialRepository testimonialRepository;
+	
 	@PostMapping("/createadmin/")
 	public String create(@RequestBody Admin admin) {
 		adminRepository.save(admin);
@@ -204,5 +209,42 @@ public class AdminController {
 		List<UserInfo> userInfo = userInfoRepository.findAll();
 		return new ResponseEntity<List<UserInfo>>(userInfo, HttpStatus.OK);
 	}
-
+	
+	@PutMapping("/manage/testimonial/{id}")
+	public String manageTestimonial(@PathVariable int id) {
+		Testimonial testimonial=testimonialRepository.findById(id).get();
+		testimonial.setTestimonialStatus(true);
+		testimonialRepository.save(testimonial);
+		return "Testimonial status updated by Admin";
+	}
+	
+	@GetMapping("/get/alltestimonial/")
+	public ResponseEntity<List<Testimonial>> getAllTestimonial(){
+		List<Testimonial> list=testimonialRepository.findAll();
+		return new ResponseEntity<List<Testimonial>>(list,HttpStatus.OK);
+	}
+	
+	@GetMapping("/get/totalregistereduser/")
+	public String countTotalRegUser() {
+		long count=userInfoRepository.count();
+		return "total registered user: "+count;
+	}
+	
+	@GetMapping("/get/totalvehiclebooking/")
+	public String countTotalBooking() {
+		long count=vehicleBookingRepository.count();
+		return "total vehicle booking: "+count;
+	}
+	
+	@GetMapping("/get/totalqueries/")
+	public String countTotalQueries() {
+		long count=queriesRepository.count();
+		return "total queries: "+count;
+	}
+	
+	@GetMapping("/get/totaltestimonial/")
+	public String countTotalTestimonial() {
+		long count=testimonialRepository.count();
+		return "total testimonial: "+count;
+	}
 }

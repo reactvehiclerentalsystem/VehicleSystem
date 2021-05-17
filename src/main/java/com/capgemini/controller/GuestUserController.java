@@ -26,7 +26,6 @@ public class GuestUserController {
 	@Autowired
 	private VehicleRepository vehicleRepository;
 	
-	
 	@GetMapping("/search/type/{vehicleType}")
 	public ResponseEntity<Vehicle> searchVehicleByType(@PathVariable String vehicleType) {
 		Vehicle vehicle = vehicleRepository.findByVehicleType(vehicleType);

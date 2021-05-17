@@ -1,4 +1,3 @@
-
 package com.capgemini.exception;
 
 import org.springframework.http.HttpStatus;
