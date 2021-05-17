@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.entities.UserInfo;
 import com.capgemini.entities.Vehicle;
 import com.capgemini.entities.VehicleBooking;
+import com.capgemini.exception.UserIdNotFoundException;
 import com.capgemini.exception.VehicleIdNotFoundException;
 import com.capgemini.repository.UserInfoRepository;
 import com.capgemini.repository.VehicleBookingRepository;
@@ -34,26 +35,28 @@ public class VehicleBookingController {
 
 	@PostMapping("/book/vehicle{vehicleId}/user/{userId}")
 	public String bookVehicle(@RequestBody VehicleBooking vehicleBooking, @PathVariable int vehicleId,
-			@PathVariable int userId) throws VehicleIdNotFoundException {
+			@PathVariable int userId) throws VehicleIdNotFoundException, UserIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
 		UserInfo userInfo = userInfoRepository.findById(userId).get();
-		if (vehicle != null && userInfo.isDeleted() == false) {
-
-			// vehicleBooking.setCancelled(false);
-
-			vehicle.setAvailable(false); // this will set the availability of vehicle to other users as booked.
-
-			vehicleBooking.setUserInfo(userInfo); // this will set userInfo in vehicleBooking.
-
-			vehicleBooking.setCancelled(false);
-
-			vehicleBooking.setVehicle(vehicle);// this will save the selected vehicle with booking user.
-
-			vehicleBookingRepository.save(vehicleBooking);// it will get the vehicle booked for the user.
-			return "Vehicle Booked!";
-		} else {
-			throw new VehicleIdNotFoundException("Incorrect Id! Enter correct Id!");
+		if(vehicle == null) {
+			throw new VehicleIdNotFoundException("Vehicle Not Found!!");
 		}
+		else if (vehicle.isDeleted() == true && vehicle.isAvailable() == false) {
+			throw new VehicleIdNotFoundException("Vehicle is currently unavailable!!");
+		} else if (userInfo.isDeleted() == true) {
+			throw new UserIdNotFoundException("Invalid User Id!!");
+		}
+
+		vehicle.setAvailable(false); // this will set the availability of vehicle to other users as booked.
+
+		vehicleBooking.setUserInfo(userInfo); // this will set userInfo in vehicleBooking.
+
+		vehicleBooking.setCancelled(false);
+
+		vehicleBooking.setVehicle(vehicle);// this will save the selected vehicle with booking user.
+
+		vehicleBookingRepository.save(vehicleBooking);// it will get the vehicle booked for the user.
+		return "Vehicle Booked!";
 	}
 
 	@PutMapping("/delete/{bookingId}")
