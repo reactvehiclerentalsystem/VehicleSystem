@@ -20,7 +20,7 @@ public class VehicleBrand {
 	
 	@Column(nullable = false, unique = true)
 	private String brand_name;
-	private boolean isDeleted = false;
+	private boolean isDeleted=false;
 
 	@OneToMany(mappedBy = "vehicleBrand")
 	@JsonManagedReference

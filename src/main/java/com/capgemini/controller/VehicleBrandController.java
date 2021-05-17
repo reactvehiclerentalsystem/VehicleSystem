@@ -21,7 +21,6 @@ import com.capgemini.exception.VehicleIdNotFoundException;
 import com.capgemini.repository.VehicleBrandRepository;
 import com.capgemini.repository.VehicleRepository;
 
-
 @RestController
 @RequestMapping("/api/brand/")
 public class VehicleBrandController {
@@ -35,6 +34,7 @@ public class VehicleBrandController {
 	@PostMapping("/create/")
 	public ResponseEntity<String> createBrand(@RequestBody VehicleBrand vehicleBrand) {
 
+		vehicleBrand.setDeleted(false);
 		vehicleBrandRepository.save(vehicleBrand);
 
 		return new ResponseEntity<>("Brand Added", HttpStatus.OK);
@@ -44,16 +44,16 @@ public class VehicleBrandController {
 	public ResponseEntity<String> updateBrand(@PathVariable int brand_id, @RequestBody VehicleBrand vehicleBrand)
 			throws BrandNotFoundException {
 
-		if (vehicleBrand.isDeleted()==true) {
+		VehicleBrand v = vehicleBrandRepository.findById(brand_id).get();
+		if (v.isDeleted() == false) {
+			v.setBrand_name(vehicleBrand.getBrand_name());
+			vehicleBrandRepository.save(v);
+			return new ResponseEntity<>("Brand Updated", HttpStatus.OK);
+
+		} else {
 			throw new BrandNotFoundException("Brand Not Found!!");
 		}
-		VehicleBrand v = vehicleBrandRepository.findById(brand_id).get();
-		v.setBrand_name(vehicleBrand.getBrand_name());
-		vehicleBrandRepository.save(v);
-
-		return new ResponseEntity<>("Brand Updated", HttpStatus.OK);
 	}
-
 
 	@PutMapping("/delete/{brand_id}")
 	public String deleteBrand(@PathVariable int brand_id) {
@@ -65,7 +65,7 @@ public class VehicleBrandController {
 		{
 			vehicle.setDeleted(true);
 			vehicleBrandRepository.save(vehicle);// if vehicle is is present it will get deleted , hence
-											// cancelled.
+			// cancelled.
 			return "Vehicle Brand Deleted!";
 		} else {
 			throw new BrandNotFoundException("Incorrect Brand Id! Enter correct Id!");

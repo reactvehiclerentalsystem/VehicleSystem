@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +21,7 @@ import com.capgemini.entities.UserInfo;
 import com.capgemini.entities.Vehicle;
 import com.capgemini.entities.VehicleBooking;
 import com.capgemini.entities.VehicleBrand;
+import com.capgemini.exception.BrandNotFoundException;
 import com.capgemini.exception.ContactIdNotFoundException;
 import com.capgemini.exception.QueryIdMismatchException;
 import com.capgemini.exception.TestimonialIdNotFoundException;
@@ -72,11 +72,19 @@ public class AdminController {
 		return "Record Added:";
 	}
 
-	@PostMapping("/postvehicle/")
-	public String postVehicle(@RequestBody Vehicle vehicle) {
-		vehicle.setDeleted(false);
-		vehicleRepository.save(vehicle);
-		return "Vehicle Posted";
+	@PostMapping("/postvehicle/{brand_id}")
+	public String addVehicle(@RequestBody Vehicle vehicle, @PathVariable int brand_id) {
+
+		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
+		if (vehicleBrand.isDeleted() == true) {
+			throw new BrandNotFoundException("Brand Not Found!!");
+		} else {
+			vehicle.setVehicleBrand(vehicleBrand);
+			vehicle.setDeleted(false);
+
+			vehicleRepository.save(vehicle);
+			return "Vehicle Added";
+		}
 	}
 
 	@PutMapping("/update/{vehicleId}/brand/{brand_id}")
@@ -104,7 +112,6 @@ public class AdminController {
 
 	}
 
-
 	@PutMapping("/deletevehicle/{vehicleId}")
 	public String removeVehicle(@PathVariable int vehicleId) throws VehicleIdNotFoundException {
 
@@ -124,23 +131,32 @@ public class AdminController {
 
 	}
 
-	@PostMapping("/Admin/Managebooking/vehicle{vehicleId}")
-	public String bookVehicle(@RequestBody VehicleBooking vehicleBooking, @PathVariable int vehicleId)
-			throws VehicleAlreadyBookedException {
+	@PostMapping("/Createbooking/vehicle{vehicleId}/user/{userId}")
+	public String bookVehicle(@RequestBody VehicleBooking vehicleBooking, @PathVariable int vehicleId,
+			@PathVariable int userId) throws VehicleIdNotFoundException, UserIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
-		if (vehicle.isAvailable() == true) {
-			vehicle.setAvailable(false);
-			vehicleBooking.setCancelled(false);
-			vehicleBooking.setVehicle(vehicle);
-			vehicleBookingRepository.save(vehicleBooking);
-			return "Vehicle Booked";
-		} else {
-			throw new VehicleAlreadyBookedException("Vehicle is already Booked!");
+		UserInfo userInfo = userInfoRepository.findById(userId).get();
+		if (vehicle == null) {
+			throw new VehicleIdNotFoundException("Vehicle Not Found!!");
+		} else if (vehicle.isDeleted() == true && vehicle.isAvailable() == false) {
+			throw new VehicleIdNotFoundException("Vehicle is currently unavailable!!");
+		} else if (userInfo.isDeleted() == true) {
+			throw new UserIdNotFoundException("Invalid User Id!!");
 		}
 
+		vehicle.setAvailable(false); // this will set the availability of vehicle to other users as booked.
+
+		vehicleBooking.setUserInfo(userInfo); // this will set userInfo in vehicleBooking.
+
+		vehicleBooking.setCancelled(false);
+
+		vehicleBooking.setVehicle(vehicle);// this will save the selected vehicle with booking user.
+
+		vehicleBookingRepository.save(vehicleBooking);// it will get the vehicle booked for the user.
+		return "Vehicle Booked!";
 	}
 
-	@PutMapping("/Admin/cancelbooking/booking{bookingId}")
+	@PutMapping("/cancelbooking/booking{bookingId}")
 	public String cancelVehicle(@PathVariable int bookingId) throws VehicleAvailableException {
 		VehicleBooking vehicleBooking = vehicleBookingRepository.findById(bookingId).get();
 		Vehicle vehicle = vehicleBooking.getVehicle();
@@ -155,14 +171,14 @@ public class AdminController {
 		}
 	}
 
-	@PostMapping("/Admin/create/VehicleBrand/")
+	@PostMapping("/create/VehicleBrand/")
 	public String createVehicleBrand(@RequestBody VehicleBrand vehicleBrand) {
 		vehicleBrandRepository.save(vehicleBrand);
 		return "Vehicle Brand Created";
 
 	}
 
-	@PutMapping("/Admin/update/VehicleBrand/{brand_id}")
+	@PutMapping("/update/VehicleBrand/{brand_id}")
 	public String updateVehicleBrand(@RequestBody VehicleBrand vb, @PathVariable int brand_id) {
 		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
 		if (vehicleBrand != null) {
@@ -173,10 +189,21 @@ public class AdminController {
 
 	}
 
-	@DeleteMapping("/delete/VelhicleBrand/{brand_id}/")
-	public String deleteVehicleBrand(@PathVariable int brand_id) {
-		vehicleBrandRepository.deleteById(brand_id);
-		return "Vehicle Brand is Deleted by Admin!";
+	@PutMapping("/deletebrand/{brand_id}")
+	public String deleteBrand(@PathVariable int brand_id) {
+
+		VehicleBrand vehicle = vehicleBrandRepository.findById(brand_id).get();
+
+		if (vehicle != null && vehicle.isDeleted() == false) // if vehicle id is present and vehicle status is not
+																// deleted then the method will get accessed.
+		{
+			vehicle.setDeleted(true);
+			vehicleBrandRepository.save(vehicle);// if vehicle is is present it will get deleted , hence
+			// cancelled.
+			return "Vehicle Brand Deleted By Admin!";
+		} else {
+			throw new BrandNotFoundException("Incorrect Brand Id! Enter correct Id!");
+		}
 	}
 
 	@PutMapping("/updatecontact/{contactId}/email/{email}/mobile/{mobile}")
