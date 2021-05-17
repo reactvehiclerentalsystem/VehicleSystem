@@ -1,4 +1,3 @@
-
 package com.capgemini.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +22,17 @@ public class VehicleBrandImpl implements IVehicleBrandService {
 
 	@Override
 	public String updateBrand(int brand_id, VehicleBrand vehicleBrand) {
-
-		if (!vehicleBrandRepository.existsById(brand_id)) {
+		
+		if(!vehicleBrandRepository.existsById(brand_id)) {
 			throw new BrandNotFoundException("Check the id and Try again");
 		}
 		VehicleBrand v = vehicleBrandRepository.findById(brand_id).get();
-		v.setBrand_name(vehicleBrand.getBrand_name());
-		vehicleBrandRepository.save(v);
-
-		return "Brand Updated";
+			v.setBrand_name(vehicleBrand.getBrand_name());
+			vehicleBrandRepository.save(v);
+		
+		return "Brand Updated";	
 	}
+	
 
 	@Override
 	public String deleteBrand(int brand_id) {

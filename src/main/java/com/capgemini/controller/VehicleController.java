@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.entities.Vehicle;
 import com.capgemini.entities.VehicleBrand;
+import com.capgemini.exception.BrandNotFoundException;
 //import com.capgemini.entities.VehicleBooking;
 import com.capgemini.exception.VehicleIdNotFoundException;
 import com.capgemini.repository.VehicleBrandRepository;
@@ -31,13 +32,17 @@ public class VehicleController {
 
 	@PostMapping("/add/{brand_id}")
 	public String addVehicle(@RequestBody Vehicle vehicle, @PathVariable int brand_id) {
-
+		
 		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
+		if(vehicleBrand.isDeleted()==true) {
+			throw new BrandNotFoundException("Brand Not Found!!");
+		} else {
 		vehicle.setVehicleBrand(vehicleBrand);
 		vehicle.setDeleted(false);
 
 		vehicleRepository.save(vehicle);
 		return "Vehicle Added";
+	}
 	}
 
 	@PutMapping("/update/{vehicleId}/brand/{brand_id}")
@@ -45,7 +50,7 @@ public class VehicleController {
 			throws VehicleIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
 		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
-		if (vehicle != null) {
+		if (vehicle != null && vehicle.isDeleted() == false) {
 			vehicle.setVehiclePlateNumber(v.getVehiclePlateNumber());
 			vehicle.setVehicleName(v.getVehicleName());
 			vehicle.setVehicleType(v.getVehicleType());

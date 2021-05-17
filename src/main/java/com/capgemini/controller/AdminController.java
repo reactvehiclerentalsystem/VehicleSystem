@@ -79,10 +79,12 @@ public class AdminController {
 		return "Vehicle Posted";
 	}
 
-	@PutMapping("/updatevehicle/{vehicleId}")
-	public String updateVehicle(@PathVariable int vehicleId, @RequestBody Vehicle v) {
+	@PutMapping("/update/{vehicleId}/brand/{brand_id}")
+	public String updateVehicle(@RequestBody Vehicle v, @PathVariable int vehicleId, @PathVariable int brand_id)
+			throws VehicleIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
-		if (vehicle != null) {
+		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
+		if (vehicle != null && vehicle.isDeleted() == false) {
 			vehicle.setVehiclePlateNumber(v.getVehiclePlateNumber());
 			vehicle.setVehicleName(v.getVehicleName());
 			vehicle.setVehicleType(v.getVehicleType());
@@ -91,13 +93,17 @@ public class AdminController {
 			vehicle.setNumberOfSeats(v.getNumberOfSeats());
 			vehicle.setDailyPrice(v.getDailyPrice());
 			vehicle.setAvailable(true);
+			vehicle.setVehicleBrand(vehicleBrand);
 			vehicle.setDeleted(false);
-
 			vehicleRepository.save(vehicle);
+			return "Vehicle Updated!";
+		} else {
+
+			throw new VehicleIdNotFoundException("Incorrect Id! Enter correct Id!");
 		}
-		return "Vehicle Updated";
 
 	}
+
 
 	@PutMapping("/deletevehicle/{vehicleId}")
 	public String removeVehicle(@PathVariable int vehicleId) throws VehicleIdNotFoundException {
