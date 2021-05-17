@@ -26,36 +26,42 @@ public class GuestUserController {
 	@Autowired
 	private VehicleRepository vehicleRepository;
 
+	@GetMapping("/search/name/{vehicleName}")
+	public ResponseEntity<List<Vehicle>> searchVehicleByName(@PathVariable String vehicleName) {
+		List<Vehicle> vehicle =  vehicleRepository.findByVehicleName(vehicleName);
+		return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
+	}
+
 	@GetMapping("/search/type/{vehicleType}")
-	public ResponseEntity<Vehicle> searchVehicleByType(@PathVariable String vehicleType) {
-		Vehicle vehicle = vehicleRepository.findByVehicleType(vehicleType);
-		return new ResponseEntity<Vehicle>(vehicle, HttpStatus.OK);
+	public ResponseEntity <List<Vehicle>> searchVehicleByType(@PathVariable String vehicleType) {
+	    List<Vehicle> vehicle = vehicleRepository.findByVehicleType(vehicleType);
+		return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
 	}
 
 	@GetMapping("/search/location/{vehicleLocation}")
-	public ResponseEntity<Vehicle> searchVehicleByLocation(@PathVariable String vehicleLocation) {
-		Vehicle vehicle = vehicleRepository.findByVehicleLocation(vehicleLocation);
-		return new ResponseEntity<Vehicle>(vehicle, HttpStatus.OK);
+	public ResponseEntity<List<Vehicle>> searchVehicleByLocation(@PathVariable String vehicleLocation) {
+		List<Vehicle> vehicle = vehicleRepository.findByVehicleLocation(vehicleLocation);
+		return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
 	}
 
 	@GetMapping("/search/seatCapacity/{numberOfSeats}")
-	public ResponseEntity<Vehicle> searchVehicleBySeatCapacity(@PathVariable int numberOfSeats) {
-		Vehicle vehicle = vehicleRepository.findByNumberOfSeats(numberOfSeats);
-		return new ResponseEntity<Vehicle>(vehicle, HttpStatus.OK);
+	public ResponseEntity<List<Vehicle>> searchVehicleBySeatCapacity(@PathVariable int numberOfSeats) {
+		 List<Vehicle> vehicle = vehicleRepository.findByNumberOfSeats(numberOfSeats);
+		return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
 	}
 
 	@GetMapping("/search/type/{vehicleType}/name/{vehicleName}")
-	public ResponseEntity<Vehicle> searchVehicle(@PathVariable String vehicleType, @PathVariable String vehicleName) {
-		Vehicle vehicle = vehicleRepository.findByVehicleTypeAndVehicleName(vehicleType, vehicleName);
-		return new ResponseEntity<Vehicle>(vehicle, HttpStatus.OK);
+	public ResponseEntity<List<Vehicle>> searchVehicle(@PathVariable String vehicleType, @PathVariable String vehicleName) {
+		List<Vehicle> vehicle = vehicleRepository.findByVehicleTypeAndVehicleName(vehicleType, vehicleName);
+		return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
 	}
 
 	@GetMapping("/search/type/{vehicleType}/name/{vehicleName}/color/{vehicleColor}")
-	public ResponseEntity<Vehicle> seacrhVehicleV1(@PathVariable String vehicleType, @PathVariable String vehicleName,
+	public ResponseEntity<List<Vehicle>> seacrhVehicleV1(@PathVariable String vehicleType, @PathVariable String vehicleName,
 			@PathVariable String vehicleColor) {
-		Vehicle vehicle = vehicleRepository.findByVehicleTypeAndVehicleNameAndVehicleColor(vehicleType, vehicleName,
+		List<Vehicle> vehicle = vehicleRepository.findByVehicleTypeAndVehicleNameAndVehicleColor(vehicleType, vehicleName,
 				vehicleColor);
-		return new ResponseEntity<Vehicle>(vehicle, HttpStatus.OK);
+		return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
 	}
 
 	@GetMapping("/search/all")

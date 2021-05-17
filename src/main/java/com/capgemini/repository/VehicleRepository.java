@@ -1,21 +1,23 @@
 package com.capgemini.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.capgemini.entities.Vehicle;
 
 public interface VehicleRepository extends JpaRepository<Vehicle, Integer> {
 
-	Vehicle findByVehicleName(String vehicleName);
+	List<Vehicle> findByVehicleName(String vehicleName);
 
-	Vehicle findByVehicleType(String vehicleType);
+	List<Vehicle> findByVehicleType(String vehicleType);
 
-	Vehicle findByVehicleLocation(String vehiclelocation);
+	List<Vehicle> findByVehicleLocation(String vehiclelocation);
 
-	Vehicle findByNumberOfSeats(int numberOfSeats);
+	List<Vehicle> findByNumberOfSeats(int numberOfSeats);
 
-	Vehicle findByVehicleTypeAndVehicleName(String vehicleType, String vehicleName);
+	List<Vehicle> findByVehicleTypeAndVehicleName(String vehicleType, String vehicleName);
 
-	Vehicle findByVehicleTypeAndVehicleNameAndVehicleColor(String vehicleType, String VehicleName, String vehicleColor);
+	List<Vehicle> findByVehicleTypeAndVehicleNameAndVehicleColor(String vehicleType, String VehicleName, String vehicleColor);
 
 }
