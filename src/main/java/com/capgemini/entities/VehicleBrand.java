@@ -24,4 +24,3 @@ public class VehicleBrand {
 	private List<Vehicle> vehicle = new ArrayList<>();
 
 }
-

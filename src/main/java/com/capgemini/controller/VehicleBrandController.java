@@ -23,43 +23,43 @@ import com.capgemini.service.VehicleBrandImpl;
 @RestController
 @RequestMapping("/api/brand/")
 public class VehicleBrandController {
-	
+
 	@Autowired
 	private VehicleBrandImpl service;
-	
+
 	@Autowired
 	VehicleBrandRepository vehicleBrandRepository;
-	
+
 	@Autowired
 	VehicleRepository vehicleRepository;
-	
+
 	@PostMapping("/")
 	public ResponseEntity<String> createBrand(@RequestBody VehicleBrand vehicleBrand) {
-		
+
 		service.createBrand(vehicleBrand);
-		
+
 		return new ResponseEntity<>("Added", HttpStatus.OK);
 	}
-	
-	@PutMapping("/{brand_id}") 
-	public ResponseEntity<String> updateBrand(@PathVariable int brand_id, @RequestBody VehicleBrand vehicleBrand) throws BrandNotFoundException {
-		
+
+	@PutMapping("/{brand_id}")
+	public ResponseEntity<String> updateBrand(@PathVariable int brand_id, @RequestBody VehicleBrand vehicleBrand)
+			throws BrandNotFoundException {
+
 		service.updateBrand(brand_id, vehicleBrand);
-		
+
 		return new ResponseEntity<>("Updated", HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/{brand_id}")
 	public ResponseEntity<String> deleteBrand(@PathVariable int brand_id) {
-		
+
 		service.deleteBrand(brand_id);
 		return new ResponseEntity<>("Deleted", HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/{brand_id}")
 	public VehicleBrand findById(@PathVariable int brand_id) {
-		
+
 		return vehicleBrandRepository.findById(brand_id).get();
 	}
 }
-

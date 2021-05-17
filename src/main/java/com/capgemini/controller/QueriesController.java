@@ -14,10 +14,10 @@ import com.capgemini.repository.QueriesRepository;
 public class QueriesController {
 	@Autowired
 	private QueriesRepository queriesRepository;
-	
+
 	@PostMapping("/post/{query}")
 	public String postQuery(@PathVariable String query) {
-		Queries queries=new Queries();
+		Queries queries = new Queries();
 		queries.setQuery(query);
 		queriesRepository.save(queries);
 		return "Query Posted";

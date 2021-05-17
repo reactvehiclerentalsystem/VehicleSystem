@@ -14,5 +14,5 @@ public class Queries {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int queryId;
 	private String query;
-	private String queryStatus="Query Unchecked";
+	private String queryStatus = "Query Unchecked";
 }

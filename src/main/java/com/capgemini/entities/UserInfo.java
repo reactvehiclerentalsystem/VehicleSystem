@@ -13,15 +13,15 @@ import lombok.Data;
 public class UserInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
-    private String userName;
-    private String userNumber;
+	private int userId;
+	private String userName;
+	private String userNumber;
 	@Column(unique = true, nullable = false)
 	private String userEmail;
-    private String userPassword;
+	private String userPassword;
 	@Column(unique = true, nullable = false)
 	private String userAdhaar;
 //    private String testimonial;
-    private boolean isDeleted;
+	private boolean isDeleted;
 
 }

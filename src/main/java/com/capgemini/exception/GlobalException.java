@@ -38,4 +38,8 @@ public class GlobalException {
 	public ResponseEntity<String> handleException(QueryIdMismatchException q){
 		return new ResponseEntity<String>(q.getMessage(),HttpStatus.NOT_FOUND);
 	}
+	@ExceptionHandler (value =ContactIdNotFoundException.class)
+	public ResponseEntity<String> handleException(ContactIdNotFoundException q){
+		return new ResponseEntity<String>(q.getMessage(),HttpStatus.NOT_FOUND);
+	}
 }

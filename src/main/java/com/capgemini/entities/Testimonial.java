@@ -14,5 +14,5 @@ public class Testimonial {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String testimonials;
-	private boolean testimonialStatus=false; //inActive
+	private boolean testimonialStatus = false; // inActive
 }

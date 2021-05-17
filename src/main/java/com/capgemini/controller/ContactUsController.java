@@ -14,6 +14,7 @@ import com.capgemini.repository.ContactUsRepository;
 public class ContactUsController {
 	@Autowired
 	private ContactUsRepository contactUsRepo;
+
 	@PostMapping("/addcontact/")
 	public String addContactUs(@RequestBody ContactUs contactUs) {
 		contactUsRepo.save(contactUs);

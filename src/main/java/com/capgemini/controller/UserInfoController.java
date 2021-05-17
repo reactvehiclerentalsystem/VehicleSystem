@@ -22,57 +22,58 @@ import com.capgemini.repository.UserInfoRepository;
 public class UserInfoController {
 	@Autowired
 	private UserInfoRepository userInfoRepository;
-	
+
 	@Autowired
 	private TestimonialRepository testimonialRepository;
+
 	@PostMapping("/")
 	public String create(@RequestBody UserInfo user) {
-		
+
 		user.setDeleted(false);
 		userInfoRepository.save(user);
 		return "added";
 	}
+
 	@GetMapping("/user/{id}")
 	public ResponseEntity<UserInfo> findById(@PathVariable int id) throws UserIdNotFoundException {
-		if(userInfoRepository.existsById(id)) {
-			UserInfo userInfo=userInfoRepository.findById(id).get();
-			return new ResponseEntity<UserInfo>(userInfo,HttpStatus.OK);
-		}else {
+		if (userInfoRepository.existsById(id)) {
+			UserInfo userInfo = userInfoRepository.findById(id).get();
+			return new ResponseEntity<UserInfo>(userInfo, HttpStatus.OK);
+		} else {
 			throw new UserIdNotFoundException("User Id not found!");
 		}
 	}
-	
+
 	@PutMapping("/user/{id}")
 	public String update(@PathVariable int id, @RequestBody UserInfo ui) throws UserIdNotFoundException {
-		
-		UserInfo dbUser =  userInfoRepository.findById(id).get();
-		if(dbUser != null && dbUser.isDeleted()==false) {
+
+		UserInfo dbUser = userInfoRepository.findById(id).get();
+		if (dbUser != null && dbUser.isDeleted() == false) {
 			dbUser.setUserName(ui.getUserName());
 			dbUser.setUserEmail(ui.getUserEmail());
 			dbUser.setDeleted(false);
 			userInfoRepository.save(dbUser);
 			return "User Profile Updated!!";
-		}
-		else {
+		} else {
 			throw new UserIdNotFoundException("User Id not found!");
 		}
 	}
-	
+
 	@PutMapping("/delete/{id}")
 	public String deleteRecord(@PathVariable int id) throws UserIdNotFoundException {
-		UserInfo userInfo=userInfoRepository.findById(id).get();
-		if(userInfo!=null && userInfo.isDeleted()==false) {
+		UserInfo userInfo = userInfoRepository.findById(id).get();
+		if (userInfo != null && userInfo.isDeleted() == false) {
 			userInfo.setDeleted(true);
 			userInfoRepository.save(userInfo);
 			return "Record Deleted";
-		}else {
+		} else {
 			throw new UserIdNotFoundException("User Id not found!");
 		}
 	}
-	
+
 	@PostMapping("/post/testimonial/{testimonials}")
 	public String postTestimonial(@PathVariable String testimonials) {
-		Testimonial testimonial=new Testimonial();
+		Testimonial testimonial = new Testimonial();
 		testimonial.setTestimonials(testimonials);
 		testimonialRepository.save(testimonial);
 		return "Testimonial posted by Registered user";

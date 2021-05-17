@@ -21,7 +21,7 @@ public class Vehicle {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int vehicleId;
-	@Column(length = 15,unique = true)
+	@Column(length = 15, unique = true)
 	private String vehiclePlateNumber;
 	private String vehicleName;
 	private String vehicleType;
@@ -30,11 +30,11 @@ public class Vehicle {
 	@Column(length = 2)
 	private int numberOfSeats;
 	private double dailyPrice;
-	private boolean isAvailable; //specifies availability of vehicle!
+	private boolean isAvailable; // specifies availability of vehicle!
 	private boolean isDeleted;
 
 	@ManyToOne
 	@JsonBackReference
 	@JoinColumn(name = "brand_id", referencedColumnName = "brand_id")
-	private VehicleBrand vehicleBrand; 
+	private VehicleBrand vehicleBrand;
 }

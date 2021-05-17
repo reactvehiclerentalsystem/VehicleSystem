@@ -33,20 +33,20 @@ public class VehicleBookingController {
 	private UserInfoRepository userInfoRepository;
 
 	@PostMapping("/book/vehicle{vehicleId}/user/{userId}")
-	public String bookVehicle(@RequestBody VehicleBooking vehicleBooking, @PathVariable int vehicleId,@PathVariable int userId)
-			throws VehicleIdNotFoundException {
+	public String bookVehicle(@RequestBody VehicleBooking vehicleBooking, @PathVariable int vehicleId,
+			@PathVariable int userId) throws VehicleIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
-		UserInfo userInfo=userInfoRepository.findById(userId).get();
-		if (vehicle != null && userInfo.isDeleted()==false) {
-			
-			//vehicleBooking.setCancelled(false);
+		UserInfo userInfo = userInfoRepository.findById(userId).get();
+		if (vehicle != null && userInfo.isDeleted() == false) {
+
+			// vehicleBooking.setCancelled(false);
 
 			vehicle.setAvailable(false); // this will set the availability of vehicle to other users as booked.
-			
-			vehicleBooking.setUserInfo(userInfo); //this will set userInfo in vehicleBooking.
-			
+
+			vehicleBooking.setUserInfo(userInfo); // this will set userInfo in vehicleBooking.
+
 			vehicleBooking.setCancelled(false);
-			
+
 			vehicleBooking.setVehicle(vehicle);// this will save the selected vehicle with booking user.
 
 			vehicleBookingRepository.save(vehicleBooking);// it will get the vehicle booked for the user.

@@ -8,4 +8,3 @@ public class BrandNotFoundException extends RuntimeException {
 	}
 
 }
-

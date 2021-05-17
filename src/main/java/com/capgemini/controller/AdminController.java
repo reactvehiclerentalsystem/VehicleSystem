@@ -22,7 +22,9 @@ import com.capgemini.entities.UserInfo;
 import com.capgemini.entities.Vehicle;
 import com.capgemini.entities.VehicleBooking;
 import com.capgemini.entities.VehicleBrand;
+import com.capgemini.exception.ContactIdNotFoundException;
 import com.capgemini.exception.QueryIdMismatchException;
+import com.capgemini.exception.TestimonialIdNotFoundException;
 import com.capgemini.exception.UserIdNotFoundException;
 import com.capgemini.exception.VehicleAlreadyBookedException;
 import com.capgemini.exception.VehicleAvailableException;
@@ -63,7 +65,7 @@ public class AdminController {
 
 	@Autowired
 	private TestimonialRepository testimonialRepository;
-	
+
 	@PostMapping("/createadmin/")
 	public String create(@RequestBody Admin admin) {
 		adminRepository.save(admin);
@@ -172,14 +174,19 @@ public class AdminController {
 	}
 
 	@PutMapping("/updatecontact/{contactId}/email/{email}/mobile/{mobile}")
-	public String updateContactUs(@PathVariable int contactId, @PathVariable String email,
-			@PathVariable String mobile) {
+	public String updateContactUs(@PathVariable int contactId, @PathVariable String email, @PathVariable String mobile)
+			throws ContactIdNotFoundException {
 		ContactUs contactUs = contactUsRepo.findById(contactId).get();
-		contactUs.setEmail(email);
-		contactUs.setMobile(mobile);
+		if (contactUs != null) {
+			contactUs.setEmail(email);
+			contactUs.setMobile(mobile);
 
-		contactUsRepo.save(contactUs);
-		return "Contact Us Updated by Admin!";
+			contactUsRepo.save(contactUs);
+			return "Contact Us Updated by Admin!";
+		} else {
+			throw new ContactIdNotFoundException("ContactId Mismatch!");
+		}
+
 	}
 
 	@PutMapping("/update/querysatus/{queryId}")
@@ -203,48 +210,52 @@ public class AdminController {
 			throw new UserIdNotFoundException("User Id not found!");
 		}
 	}
-	
+
 	@GetMapping("/search/allRegisteredUsers")
 	public ResponseEntity<List<UserInfo>> getRegisteredUsers() {
 		List<UserInfo> userInfo = userInfoRepository.findAll();
 		return new ResponseEntity<List<UserInfo>>(userInfo, HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/manage/testimonial/{id}")
-	public String manageTestimonial(@PathVariable int id) {
-		Testimonial testimonial=testimonialRepository.findById(id).get();
-		testimonial.setTestimonialStatus(true);
-		testimonialRepository.save(testimonial);
-		return "Testimonial status updated by Admin";
+	public String manageTestimonial(@PathVariable int id) throws TestimonialIdNotFoundException {
+		Testimonial testimonial = testimonialRepository.findById(id).get();
+		if (testimonial != null) {
+			testimonial.setTestimonialStatus(true);
+			testimonialRepository.save(testimonial);
+			return "Testimonial status updated by Admin";
+		} else {
+			throw new TestimonialIdNotFoundException("Testimonial Id not found!");
+		}
 	}
-	
+
 	@GetMapping("/get/alltestimonial/")
-	public ResponseEntity<List<Testimonial>> getAllTestimonial(){
-		List<Testimonial> list=testimonialRepository.findAll();
-		return new ResponseEntity<List<Testimonial>>(list,HttpStatus.OK);
+	public ResponseEntity<List<Testimonial>> getAllTestimonial() {
+		List<Testimonial> list = testimonialRepository.findAll();
+		return new ResponseEntity<List<Testimonial>>(list, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/get/totalregistereduser/")
 	public String countTotalRegUser() {
-		long count=userInfoRepository.count();
-		return "total registered user: "+count;
+		long count = userInfoRepository.count();
+		return "total registered user: " + count;
 	}
-	
+
 	@GetMapping("/get/totalvehiclebooking/")
 	public String countTotalBooking() {
-		long count=vehicleBookingRepository.count();
-		return "total vehicle booking: "+count;
+		long count = vehicleBookingRepository.count();
+		return "total vehicle booking: " + count;
 	}
-	
+
 	@GetMapping("/get/totalqueries/")
 	public String countTotalQueries() {
-		long count=queriesRepository.count();
-		return "total queries: "+count;
+		long count = queriesRepository.count();
+		return "total queries: " + count;
 	}
-	
+
 	@GetMapping("/get/totaltestimonial/")
 	public String countTotalTestimonial() {
-		long count=testimonialRepository.count();
-		return "total testimonial: "+count;
+		long count = testimonialRepository.count();
+		return "total testimonial: " + count;
 	}
 }

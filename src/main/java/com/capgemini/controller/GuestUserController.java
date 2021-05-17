@@ -22,10 +22,10 @@ public class GuestUserController {
 
 	@Autowired
 	private QueriesRepository queriesRepository;
-	
+
 	@Autowired
 	private VehicleRepository vehicleRepository;
-	
+
 	@GetMapping("/search/type/{vehicleType}")
 	public ResponseEntity<Vehicle> searchVehicleByType(@PathVariable String vehicleType) {
 		Vehicle vehicle = vehicleRepository.findByVehicleType(vehicleType);
@@ -63,10 +63,10 @@ public class GuestUserController {
 		List<Vehicle> vehicle = vehicleRepository.findAll();
 		return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/post/{query}")
 	public String postQuery(@PathVariable String query) {
-		Queries queries=new Queries();
+		Queries queries = new Queries();
 		queries.setQuery(query);
 		queriesRepository.save(queries);
 		return "Query Posted";
