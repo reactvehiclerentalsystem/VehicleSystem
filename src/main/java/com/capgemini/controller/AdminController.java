@@ -245,9 +245,13 @@ public class AdminController {
 	}
 
 	@GetMapping("/search/allRegisteredUsers")
-	public ResponseEntity<List<UserInfo>> getRegisteredUsers() {
+	public ResponseEntity<List<UserInfo>> getRegisteredUsers() throws UserIdNotFoundException {
 		List<UserInfo> userInfo = userInfoRepository.findAll();
-		return new ResponseEntity<List<UserInfo>>(userInfo, HttpStatus.OK);
+		if (userInfo != null) {
+			return new ResponseEntity<List<UserInfo>>(userInfo, HttpStatus.OK);
+		} else {
+			throw new UserIdNotFoundException("Registered User not present of given Id.");
+		}
 	}
 
 	@PutMapping("/manage/testimonial/{id}")
@@ -263,11 +267,17 @@ public class AdminController {
 	}
 
 	@GetMapping("/get/alltestimonial/")
-	public ResponseEntity<List<Testimonial>> getAllTestimonial() {
+	public ResponseEntity<List<Testimonial>> getAllTestimonial() throws TestimonialIdNotFoundException {
 		List<Testimonial> list = testimonialRepository.findAll();
-		return new ResponseEntity<List<Testimonial>>(list, HttpStatus.OK);
+		if (list != null) {
+			return new ResponseEntity<List<Testimonial>>(list, HttpStatus.OK);
+		}else {
+			throw new TestimonialIdNotFoundException("No testimonial is yet updated.");
+		}
 	}
 
+	//ADMIN DASHBOARD
+	
 	@GetMapping("/get/totalregistereduser/")
 	public String countTotalRegUser() {
 		long count = userInfoRepository.count();

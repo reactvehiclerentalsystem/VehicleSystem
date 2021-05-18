@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.entities.UserInfo;
 import com.capgemini.entities.Vehicle;
 import com.capgemini.entities.VehicleBooking;
+import com.capgemini.exception.ListIsEmptyException;
 import com.capgemini.exception.UserIdNotFoundException;
 import com.capgemini.exception.VehicleIdNotFoundException;
 import com.capgemini.repository.UserInfoRepository;
@@ -38,10 +39,9 @@ public class VehicleBookingController {
 			@PathVariable int userId) throws VehicleIdNotFoundException, UserIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
 		UserInfo userInfo = userInfoRepository.findById(userId).get();
-		if(vehicle == null) {
+		if (vehicle == null) {
 			throw new VehicleIdNotFoundException("Vehicle Not Found!!");
-		}
-		else if (vehicle.isDeleted() == true && vehicle.isAvailable() == false) {
+		} else if (vehicle.isDeleted() == true && vehicle.isAvailable() == false) {
 			throw new VehicleIdNotFoundException("Vehicle is currently unavailable!!");
 		} else if (userInfo.isDeleted() == true) {
 			throw new UserIdNotFoundException("Invalid User Id!!");
@@ -76,14 +76,22 @@ public class VehicleBookingController {
 	}
 
 	@GetMapping("/details/all")
-	public ResponseEntity<List<VehicleBooking>> bookingDetails() {
+	public ResponseEntity<List<VehicleBooking>> bookingDetails() throws ListIsEmptyException {
 		List<VehicleBooking> vehicleBooking = vehicleBookingRepository.findAll();
-		return new ResponseEntity<List<VehicleBooking>>(vehicleBooking, HttpStatus.OK);
+		if (vehicleBooking != null) {
+			return new ResponseEntity<List<VehicleBooking>>(vehicleBooking, HttpStatus.OK);
+		} else {
+			throw new ListIsEmptyException("No Booking is done yet.");
+		}
 	}
 
 	@GetMapping("/details/{bookingId}")
-	public ResponseEntity<VehicleBooking> bookingDetails(@PathVariable int bookingId) {
+	public ResponseEntity<VehicleBooking> bookingDetails(@PathVariable int bookingId) throws ListIsEmptyException {
 		VehicleBooking vehicleBooking = vehicleBookingRepository.findById(bookingId).get();
-		return new ResponseEntity<VehicleBooking>(vehicleBooking, HttpStatus.OK);
+		if (vehicleBooking != null) {
+			return new ResponseEntity<VehicleBooking>(vehicleBooking, HttpStatus.OK);
+		}else {
+			throw new ListIsEmptyException("No Booking is done with the specified ID.");
+		}
 	}
 }

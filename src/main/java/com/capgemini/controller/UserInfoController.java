@@ -50,7 +50,10 @@ public class UserInfoController {
 		UserInfo dbUser = userInfoRepository.findById(id).get();
 		if (dbUser != null && dbUser.isDeleted() == false) {
 			dbUser.setUserName(ui.getUserName());
+			dbUser.setUserNumber(ui.getUserNumber());
 			dbUser.setUserEmail(ui.getUserEmail());
+			dbUser.setUserPassword(ui.getUserPassword());
+			dbUser.setUserAdhaar(ui.getUserAdhaar());
 			dbUser.setDeleted(false);
 			userInfoRepository.save(dbUser);
 			return "User Profile Updated!!";
