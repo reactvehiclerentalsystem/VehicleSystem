@@ -35,7 +35,7 @@ public class VehicleController {
 	public String addVehicle(@RequestBody Vehicle vehicle, @PathVariable int brand_id) {
 
 		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
-		if (vehicleBrand.isDeleted() == true) {
+		if (vehicleBrand.isDeleted() == true ||vehicleBrand==null) {
 			throw new BrandNotFoundException("Brand Not Found!!");
 		} else {
 			vehicle.setVehicleBrand(vehicleBrand);
