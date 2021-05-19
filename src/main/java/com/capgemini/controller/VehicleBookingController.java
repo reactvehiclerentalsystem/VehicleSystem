@@ -40,6 +40,7 @@ public class VehicleBookingController {
 			@PathVariable int userId) throws VehicleIdNotFoundException, UserIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
 		UserInfo userInfo = userInfoRepository.findById(userId).get();
+
 		if (vehicle == null) {
 			throw new VehicleIdNotFoundException("Vehicle Not Found!!");
 		} else if (vehicle.isDeleted() == true && vehicle.isAvailable() == false) {
@@ -50,9 +51,9 @@ public class VehicleBookingController {
 
 		vehicle.setAvailable(false); // this will set the availability of vehicle to other users as booked.
 
-		vehicleBooking.setUserInfo(userInfo); // this will set userInfo in vehicleBooking.
+		vehicleBooking.setUserInfo(userInfo); // this will assign the person who is booking in vehicleBooking.
 
-		vehicleBooking.setCancelled(false);
+		vehicleBooking.setCancelled(false); // this will save the booking status as active for the specified booking id.
 
 		vehicleBooking.setVehicle(vehicle);// this will save the selected vehicle with booking user.
 
@@ -64,16 +65,16 @@ public class VehicleBookingController {
 	public String cancelBooking(@PathVariable int bookingId) throws VehicleIdNotFoundException {
 
 		VehicleBooking vehicleBooking = vehicleBookingRepository.findById(bookingId).get();
-        Vehicle vehicle = vehicleBooking.getVehicle();
-		
+		Vehicle vehicle = vehicleBooking.getVehicle();
+
 		if (vehicleBooking != null && vehicleBooking.isCancelled() == false) {
 			vehicleBooking.setCancelled(true);
 			vehicle.setAvailable(true);
-			vehicleBookingRepository
-					.save(vehicleBooking);  /*
-											 * if vehicle is is present it will be made available to other users, and
-											 * the booking cancelled status will be made true.
-											 */
+			/*
+			 * if vehicle is present, it will be made available to other users by making
+			 * setAvailable true, and the bookingCancelled status will be made true.
+			 */
+			vehicleBookingRepository.save(vehicleBooking);
 			return "Booking Cancelled!";
 		} else {
 			throw new VehicleIdNotFoundException("Incorrect Id! Enter correct Id!");

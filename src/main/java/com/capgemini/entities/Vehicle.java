@@ -31,7 +31,7 @@ public class Vehicle {
 	private int numberOfSeats;
 	private double dailyPrice;
 	private boolean isAvailable; // specifies availability of vehicle!
-	private boolean isDeleted;
+	private boolean isDeleted; //specifies whether the vehicle is removed from database.
 
 	@ManyToOne
 	@JsonBackReference
