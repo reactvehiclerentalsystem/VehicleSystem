@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.entities.GuestUser;
 import com.capgemini.entities.Queries;
+import com.capgemini.entities.UserInfo;
 import com.capgemini.entities.Vehicle;
 import com.capgemini.exception.ListIsEmptyException;
 import com.capgemini.repository.GuestUserRepository;
 import com.capgemini.repository.QueriesRepository;
+import com.capgemini.repository.UserInfoRepository;
 import com.capgemini.repository.VehicleRepository;
 
 @RestController
@@ -32,6 +34,25 @@ public class GuestUserController {
 
 	@Autowired
 	private VehicleRepository vehicleRepository;
+	
+	@Autowired
+	private UserInfoRepository userInfoRepository;
+	
+	@PostMapping("/create")
+	public String createGuestUser(@RequestBody GuestUser user) {
+		guestUserRepository.save(user);
+		
+		return "Guset User Created";
+		
+	}
+	
+	@PostMapping("/register")
+	public String registerUser(@RequestBody UserInfo user) {
+
+		user.setDeleted(false);
+		userInfoRepository.save(user);
+		return "added";
+	}
 
 	@GetMapping("/search/type/{vehicleType}")
 	public ResponseEntity<List<Vehicle>> searchVehicleByType(@PathVariable String vehicleType)
@@ -106,13 +127,5 @@ public class GuestUserController {
 		queries.setQuery(query);
 		queriesRepository.save(queries);
 		return "Query Posted";
-	}
-	
-	@PostMapping("/create")
-	public String create(@RequestBody GuestUser user) {
-		guestUserRepository.save(user);
-		
-		return "Guset User Created";
-		
 	}
 }
