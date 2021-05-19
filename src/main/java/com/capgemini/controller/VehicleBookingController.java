@@ -1,6 +1,7 @@
 package com.capgemini.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -86,10 +87,10 @@ public class VehicleBookingController {
 	}
 
 	@GetMapping("/details/{bookingId}")
-	public ResponseEntity<VehicleBooking> bookingDetails(@PathVariable int bookingId) throws ListIsEmptyException {
-		VehicleBooking vehicleBooking = vehicleBookingRepository.findById(bookingId).get();
+	public ResponseEntity<Optional<VehicleBooking>> bookingDetails(@PathVariable int bookingId) throws ListIsEmptyException {
+		Optional<VehicleBooking> vehicleBooking = vehicleBookingRepository.findById(bookingId);
 		if (vehicleBooking != null) {
-			return new ResponseEntity<VehicleBooking>(vehicleBooking, HttpStatus.OK);
+			return new ResponseEntity<Optional<VehicleBooking>>(vehicleBooking, HttpStatus.OK);
 		}else {
 			throw new ListIsEmptyException("No Booking is done with the specified ID.");
 		}
