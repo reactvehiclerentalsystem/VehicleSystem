@@ -24,43 +24,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 class VehicleControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@MockBean
 	VehicleRepository vehicleRepository;
 	@MockBean
 	VehicleBrandRepository vehicleBrandRepository;
-	
-	/*@Test
-	void testAddVehicle() throws Exception {
-		VehicleBrand vb=new VehicleBrand();
-		vb.setBrand_id(1);
-		vb.setBrand_name("Maruti");
-		vb.setDeleted(false);
-		Vehicle vehicle=new Vehicle();
-		vehicle.setVehicleId(1);
-		vehicle.setVehiclePlateNumber("BR1234");
-		vehicle.setVehicleName("swift");
-		vehicle.setVehicleType("sports");
-		vehicle.setVehicleColor("red");
-		vehicle.setVehicleLocation("patna");
-		vehicle.setNumberOfSeats(4);
-		vehicle.setDailyPrice(1500);
-		vehicle.setAvailable(true);
-		vehicle.setDeleted(false);
-		vehicle.setVehicleBrand(vb);
-		mockMvc.perform(post("/api/vehicle/add/{brand_id}",vb.getBrand_id())
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(vehicle))
-				)
-		.andExpect(MockMvcResultMatchers.content().string(containsString("Vehicle Added")));
-	}*/
+
 	@Test
-	void testsearchVehicleByName() throws Exception{
-		VehicleBrand vb=new VehicleBrand();
+	void testsearchVehicleByName() throws Exception {
+		VehicleBrand vb = new VehicleBrand();
 		vb.setBrand_id(1);
 		vb.setBrand_name("Maruti");
 		vb.setDeleted(false);
-		Vehicle vehicle=new Vehicle();
+		Vehicle vehicle = new Vehicle();
 		vehicle.setVehiclePlateNumber("BR1234");
 		vehicle.setVehicleName("swift");
 		vehicle.setVehicleType("sports");
@@ -71,18 +47,18 @@ class VehicleControllerTest {
 		vehicle.setAvailable(true);
 		vehicle.setDeleted(false);
 		vehicle.setVehicleBrand(vb);
-		
-		mockMvc.perform(get("/api/vehicle/search/name/{vehicleName}","swift"))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+
+		mockMvc.perform(get("/api/vehicle/search/name/{vehicleName}", "swift"))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@Test
 	void testSearchVehicleByType() throws Exception {
-		VehicleBrand vb=new VehicleBrand();
+		VehicleBrand vb = new VehicleBrand();
 		vb.setBrand_id(1);
 		vb.setBrand_name("Maruti");
 		vb.setDeleted(false);
-		Vehicle vehicle=new Vehicle();
+		Vehicle vehicle = new Vehicle();
 		vehicle.setVehiclePlateNumber("BR1234");
 		vehicle.setVehicleName("swift");
 		vehicle.setVehicleType("sports");
@@ -93,18 +69,18 @@ class VehicleControllerTest {
 		vehicle.setAvailable(true);
 		vehicle.setDeleted(false);
 		vehicle.setVehicleBrand(vb);
-		
-		mockMvc.perform(get("/api/vehicle/search/type/{vehicleType}","sports"))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+
+		mockMvc.perform(get("/api/vehicle/search/type/{vehicleType}", "sports"))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@Test
 	void testSearchVehicleByLocation() throws Exception {
-		VehicleBrand vb=new VehicleBrand();
+		VehicleBrand vb = new VehicleBrand();
 		vb.setBrand_id(1);
 		vb.setBrand_name("Maruti");
 		vb.setDeleted(false);
-		Vehicle vehicle=new Vehicle();
+		Vehicle vehicle = new Vehicle();
 		vehicle.setVehiclePlateNumber("BR1234");
 		vehicle.setVehicleName("swift");
 		vehicle.setVehicleType("sports");
@@ -115,18 +91,18 @@ class VehicleControllerTest {
 		vehicle.setAvailable(true);
 		vehicle.setDeleted(false);
 		vehicle.setVehicleBrand(vb);
-		
-		mockMvc.perform(get("/api/vehicle/search/location/{vehicleLocation}","patna"))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+
+		mockMvc.perform(get("/api/vehicle/search/location/{vehicleLocation}", "patna"))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@Test
 	void testSearchVehicleBySeatCapacity() throws Exception {
-		VehicleBrand vb=new VehicleBrand();
+		VehicleBrand vb = new VehicleBrand();
 		vb.setBrand_id(1);
 		vb.setBrand_name("Maruti");
 		vb.setDeleted(false);
-		Vehicle vehicle=new Vehicle();
+		Vehicle vehicle = new Vehicle();
 		vehicle.setVehiclePlateNumber("BR1234");
 		vehicle.setVehicleName("swift");
 		vehicle.setVehicleType("sports");
@@ -137,18 +113,18 @@ class VehicleControllerTest {
 		vehicle.setAvailable(true);
 		vehicle.setDeleted(false);
 		vehicle.setVehicleBrand(vb);
-		
-		mockMvc.perform(get("/api/vehicle/search/seatCapacity/{numberOfSeats}",4))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+
+		mockMvc.perform(get("/api/vehicle/search/seatCapacity/{numberOfSeats}", 4))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@Test
 	void testSearchVehicle() throws Exception {
-		VehicleBrand vb=new VehicleBrand();
+		VehicleBrand vb = new VehicleBrand();
 		vb.setBrand_id(1);
 		vb.setBrand_name("Maruti");
 		vb.setDeleted(false);
-		Vehicle vehicle=new Vehicle();
+		Vehicle vehicle = new Vehicle();
 		vehicle.setVehiclePlateNumber("BR1234");
 		vehicle.setVehicleName("swift");
 		vehicle.setVehicleType("sports");
@@ -159,18 +135,18 @@ class VehicleControllerTest {
 		vehicle.setAvailable(true);
 		vehicle.setDeleted(false);
 		vehicle.setVehicleBrand(vb);
-		
-		mockMvc.perform(get("/api/vehicle/search/type/{vehicleType}/name/{vehicleName}","sports","swift"))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+
+		mockMvc.perform(get("/api/vehicle/search/type/{vehicleType}/name/{vehicleName}", "sports", "swift"))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@Test
 	void testSeacrhVehicleV1() throws Exception {
-		VehicleBrand vb=new VehicleBrand();
+		VehicleBrand vb = new VehicleBrand();
 		vb.setBrand_id(1);
 		vb.setBrand_name("Maruti");
 		vb.setDeleted(false);
-		Vehicle vehicle=new Vehicle();
+		Vehicle vehicle = new Vehicle();
 		vehicle.setVehiclePlateNumber("BR1234");
 		vehicle.setVehicleName("swift");
 		vehicle.setVehicleType("sports");
@@ -181,18 +157,18 @@ class VehicleControllerTest {
 		vehicle.setAvailable(true);
 		vehicle.setDeleted(false);
 		vehicle.setVehicleBrand(vb);
-		
-		mockMvc.perform(get("/api/vehicle/search/type/{vehicleType}/name/{vehicleName}/color/{vehicleColor}","sports","swift","red"))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+
+		mockMvc.perform(get("/api/vehicle/search/type/{vehicleType}/name/{vehicleName}/color/{vehicleColor}", "sports",
+				"swift", "red")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@Test
 	void testSearchAllVehicle() throws Exception {
-		VehicleBrand vb=new VehicleBrand();
+		VehicleBrand vb = new VehicleBrand();
 		vb.setBrand_id(1);
 		vb.setBrand_name("Maruti");
 		vb.setDeleted(false);
-		Vehicle vehicle=new Vehicle();
+		Vehicle vehicle = new Vehicle();
 		vehicle.setVehiclePlateNumber("BR1234");
 		vehicle.setVehicleName("swift");
 		vehicle.setVehicleType("sports");
@@ -203,8 +179,7 @@ class VehicleControllerTest {
 		vehicle.setAvailable(true);
 		vehicle.setDeleted(false);
 		vehicle.setVehicleBrand(vb);
-		
-		mockMvc.perform(get("/api/vehicle/search/allVehicles"))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+
+		mockMvc.perform(get("/api/vehicle/search/allVehicles")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 }
