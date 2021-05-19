@@ -19,8 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @WebMvcTest(ContactUsController.class)
 class ContactUsControllerTest {
 	@Autowired
-	private MockMvc mockMvc;
-	@MockBean
+	private MockMvc mockMvc; //It encapsulates all web application beans and makes them available for testing.
+	@MockBean  //It allow to mock a class or an interface and to record and verify behaviors on it.
 	ContactUsRepository contactUsRepository;
 	
 	@Test

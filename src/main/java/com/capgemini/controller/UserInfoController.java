@@ -1,5 +1,7 @@
 package com.capgemini.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +37,14 @@ public class UserInfoController {
 	}
 
 	@GetMapping("/user/{id}")
-	public ResponseEntity<UserInfo> findById(@PathVariable int id) throws UserIdNotFoundException {
+	public ResponseEntity<Optional<UserInfo>> findById(@PathVariable int id) throws UserIdNotFoundException {
 		if (userInfoRepository.existsById(id)) {
-			UserInfo userInfo = userInfoRepository.findById(id).get();
-			return new ResponseEntity<UserInfo>(userInfo, HttpStatus.OK);
+			Optional<UserInfo> userInfo = userInfoRepository.findById(id);
+			return new ResponseEntity<Optional<UserInfo>>(userInfo, HttpStatus.OK);
 		} else {
 			throw new UserIdNotFoundException("User Id not found!");
 		}
+
 	}
 
 	@PutMapping("/user/{id}")

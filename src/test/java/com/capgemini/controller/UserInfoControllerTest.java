@@ -29,25 +29,23 @@ class UserInfoControllerTest {
 	UserInfoRepository userInfoRepository;
 	@MockBean
 	TestimonialRepository testimonialRepository;
+
 	@Test
 	void testCreate() throws Exception {
-		UserInfo user=new UserInfo();
+		UserInfo user = new UserInfo();
 		user.setUserName("Shubham");
 		user.setUserEmail("shubham@gmail.com");
 		user.setUserNumber("1234567890");
 		user.setUserPassword("123@abc");
 		user.setUserAdhaar("1234567890");
 		user.setDeleted(false);
-		mockMvc.perform(post("/api/info/")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(user))
-				)
-		.andExpect(MockMvcResultMatchers.status().isOk());
+		mockMvc.perform(post("/api/info/").contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(user))).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	/*@Test
+	@Test
 	void testFindById() throws Exception {
-		UserInfo user=new UserInfo();
+		UserInfo user = new UserInfo();
 		user.setUserId(1);
 		user.setUserName("Shubham");
 		user.setUserEmail("shubham@gmail.com");
@@ -55,34 +53,15 @@ class UserInfoControllerTest {
 		user.setUserPassword("123@abc");
 		user.setUserAdhaar("1234567890");
 		user.setDeleted(false);
-		mockMvc.perform(get("/api/info/user/{id}",1))
-		.andExpect(MockMvcResultMatchers.status().isOk());
-	}*/
 
-	/*@Test
-	void testUpdate() throws Exception {
-		UserInfo user=new UserInfo();
-		user.setUserName("Shubham");
-		user.setUserEmail("shubham@gmail.com");
-		user.setUserNumber("1234567890");
-		user.setUserPassword("123@abc");
-		user.setUserAdhaar("1234567890");
-		user.setDeleted(false);
-		mockMvc.perform(put("/api/info/user/{id}",0)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(user))
-				)
-		.andExpect(MockMvcResultMatchers.status().isOk());
-	}*/
-
-	/*@Test
-	void testDeleteRecord() {
-		fail("Not yet implemented");
-	}*/
+		Mockito.when(userInfoRepository.existsById(Mockito.anyInt())).thenReturn(true);
+		Mockito.when(userInfoRepository.findById(Mockito.anyInt())).thenReturn(Mockito.any());
+		mockMvc.perform(get("/api/info/user/1")).andExpect(MockMvcResultMatchers.status().isOk());
+	}
 
 	@Test
 	void testPostTestimonial() throws Exception {
-		mockMvc.perform(post("/api/info/post/testimonial/It was great experience"))
-		.andExpect(MockMvcResultMatchers.content().string(containsString("Testimonial posted by Registered user")));
+		mockMvc.perform(post("/api/info/post/testimonial/It was great experience")).andExpect(
+				MockMvcResultMatchers.content().string(containsString("Testimonial posted by Registered user")));
 	}
 }
