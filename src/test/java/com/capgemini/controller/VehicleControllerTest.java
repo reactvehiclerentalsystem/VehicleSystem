@@ -30,7 +30,7 @@ class VehicleControllerTest {
 	@MockBean
 	VehicleBrandRepository vehicleBrandRepository;
 	
-	@Test
+	/*@Test
 	void testAddVehicle() throws Exception {
 		VehicleBrand vb=new VehicleBrand();
 		vb.setBrand_id(1);
@@ -53,7 +53,7 @@ class VehicleControllerTest {
 				.content(new ObjectMapper().writeValueAsString(vehicle))
 				)
 		.andExpect(MockMvcResultMatchers.content().string(containsString("Vehicle Added")));
-	}
+	}*/
 	@Test
 	void testsearchVehicleByName() throws Exception{
 		VehicleBrand vb=new VehicleBrand();
@@ -76,4 +76,135 @@ class VehicleControllerTest {
 		.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
+	@Test
+	void testSearchVehicleByType() throws Exception {
+		VehicleBrand vb=new VehicleBrand();
+		vb.setBrand_id(1);
+		vb.setBrand_name("Maruti");
+		vb.setDeleted(false);
+		Vehicle vehicle=new Vehicle();
+		vehicle.setVehiclePlateNumber("BR1234");
+		vehicle.setVehicleName("swift");
+		vehicle.setVehicleType("sports");
+		vehicle.setVehicleColor("red");
+		vehicle.setVehicleLocation("patna");
+		vehicle.setNumberOfSeats(4);
+		vehicle.setDailyPrice(1500);
+		vehicle.setAvailable(true);
+		vehicle.setDeleted(false);
+		vehicle.setVehicleBrand(vb);
+		
+		mockMvc.perform(get("/api/vehicle/search/type/{vehicleType}","sports"))
+		.andExpect(MockMvcResultMatchers.status().isOk());
+	}
+	
+	@Test
+	void testSearchVehicleByLocation() throws Exception {
+		VehicleBrand vb=new VehicleBrand();
+		vb.setBrand_id(1);
+		vb.setBrand_name("Maruti");
+		vb.setDeleted(false);
+		Vehicle vehicle=new Vehicle();
+		vehicle.setVehiclePlateNumber("BR1234");
+		vehicle.setVehicleName("swift");
+		vehicle.setVehicleType("sports");
+		vehicle.setVehicleColor("red");
+		vehicle.setVehicleLocation("patna");
+		vehicle.setNumberOfSeats(4);
+		vehicle.setDailyPrice(1500);
+		vehicle.setAvailable(true);
+		vehicle.setDeleted(false);
+		vehicle.setVehicleBrand(vb);
+		
+		mockMvc.perform(get("/api/vehicle/search/location/{vehicleLocation}","patna"))
+		.andExpect(MockMvcResultMatchers.status().isOk());
+	}
+	
+	@Test
+	void testSearchVehicleBySeatCapacity() throws Exception {
+		VehicleBrand vb=new VehicleBrand();
+		vb.setBrand_id(1);
+		vb.setBrand_name("Maruti");
+		vb.setDeleted(false);
+		Vehicle vehicle=new Vehicle();
+		vehicle.setVehiclePlateNumber("BR1234");
+		vehicle.setVehicleName("swift");
+		vehicle.setVehicleType("sports");
+		vehicle.setVehicleColor("red");
+		vehicle.setVehicleLocation("patna");
+		vehicle.setNumberOfSeats(4);
+		vehicle.setDailyPrice(1500);
+		vehicle.setAvailable(true);
+		vehicle.setDeleted(false);
+		vehicle.setVehicleBrand(vb);
+		
+		mockMvc.perform(get("/api/vehicle/search/seatCapacity/{numberOfSeats}",4))
+		.andExpect(MockMvcResultMatchers.status().isOk());
+	}
+	
+	@Test
+	void testSearchVehicle() throws Exception {
+		VehicleBrand vb=new VehicleBrand();
+		vb.setBrand_id(1);
+		vb.setBrand_name("Maruti");
+		vb.setDeleted(false);
+		Vehicle vehicle=new Vehicle();
+		vehicle.setVehiclePlateNumber("BR1234");
+		vehicle.setVehicleName("swift");
+		vehicle.setVehicleType("sports");
+		vehicle.setVehicleColor("red");
+		vehicle.setVehicleLocation("patna");
+		vehicle.setNumberOfSeats(4);
+		vehicle.setDailyPrice(1500);
+		vehicle.setAvailable(true);
+		vehicle.setDeleted(false);
+		vehicle.setVehicleBrand(vb);
+		
+		mockMvc.perform(get("/api/vehicle/search/type/{vehicleType}/name/{vehicleName}","sports","swift"))
+		.andExpect(MockMvcResultMatchers.status().isOk());
+	}
+	
+	@Test
+	void testSeacrhVehicleV1() throws Exception {
+		VehicleBrand vb=new VehicleBrand();
+		vb.setBrand_id(1);
+		vb.setBrand_name("Maruti");
+		vb.setDeleted(false);
+		Vehicle vehicle=new Vehicle();
+		vehicle.setVehiclePlateNumber("BR1234");
+		vehicle.setVehicleName("swift");
+		vehicle.setVehicleType("sports");
+		vehicle.setVehicleColor("red");
+		vehicle.setVehicleLocation("patna");
+		vehicle.setNumberOfSeats(4);
+		vehicle.setDailyPrice(1500);
+		vehicle.setAvailable(true);
+		vehicle.setDeleted(false);
+		vehicle.setVehicleBrand(vb);
+		
+		mockMvc.perform(get("/api/vehicle/search/type/{vehicleType}/name/{vehicleName}/color/{vehicleColor}","sports","swift","red"))
+		.andExpect(MockMvcResultMatchers.status().isOk());
+	}
+	
+	@Test
+	void testSearchAllVehicle() throws Exception {
+		VehicleBrand vb=new VehicleBrand();
+		vb.setBrand_id(1);
+		vb.setBrand_name("Maruti");
+		vb.setDeleted(false);
+		Vehicle vehicle=new Vehicle();
+		vehicle.setVehiclePlateNumber("BR1234");
+		vehicle.setVehicleName("swift");
+		vehicle.setVehicleType("sports");
+		vehicle.setVehicleColor("red");
+		vehicle.setVehicleLocation("patna");
+		vehicle.setNumberOfSeats(4);
+		vehicle.setDailyPrice(1500);
+		vehicle.setAvailable(true);
+		vehicle.setDeleted(false);
+		vehicle.setVehicleBrand(vb);
+		
+		mockMvc.perform(get("/api/vehicle/search/allVehicles"))
+		.andExpect(MockMvcResultMatchers.status().isOk());
+	}
 }
