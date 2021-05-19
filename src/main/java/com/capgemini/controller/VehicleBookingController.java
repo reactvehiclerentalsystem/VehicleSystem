@@ -60,15 +60,20 @@ public class VehicleBookingController {
 		return "Vehicle Booked!";
 	}
 
-	@PutMapping("/delete/{bookingId}")
+	@PutMapping("/cancel/{bookingId}")
 	public String cancelBooking(@PathVariable int bookingId) throws VehicleIdNotFoundException {
 
 		VehicleBooking vehicleBooking = vehicleBookingRepository.findById(bookingId).get();
-
+        Vehicle vehicle = vehicleBooking.getVehicle();
+		
 		if (vehicleBooking != null && vehicleBooking.isCancelled() == false) {
 			vehicleBooking.setCancelled(true);
-			vehicleBookingRepository.save(vehicleBooking);// if vehicle is is present it will get deleted , hence
-															// cancelled.
+			vehicle.setAvailable(true);
+			vehicleBookingRepository
+					.save(vehicleBooking);  /*
+											 * if vehicle is is present it will be made available to other users, and
+											 * the booking cancelled status will be made true.
+											 */
 			return "Booking Cancelled!";
 		} else {
 			throw new VehicleIdNotFoundException("Incorrect Id! Enter correct Id!");
@@ -87,11 +92,12 @@ public class VehicleBookingController {
 	}
 
 	@GetMapping("/details/{bookingId}")
-	public ResponseEntity<Optional<VehicleBooking>> bookingDetails(@PathVariable int bookingId) throws ListIsEmptyException {
+	public ResponseEntity<Optional<VehicleBooking>> bookingDetails(@PathVariable int bookingId)
+			throws ListIsEmptyException {
 		Optional<VehicleBooking> vehicleBooking = vehicleBookingRepository.findById(bookingId);
 		if (vehicleBooking != null) {
 			return new ResponseEntity<Optional<VehicleBooking>>(vehicleBooking, HttpStatus.OK);
-		}else {
+		} else {
 			throw new ListIsEmptyException("No Booking is done with the specified ID.");
 		}
 	}

@@ -61,11 +61,11 @@ public class VehicleBrandController {
 		VehicleBrand vehicle = vehicleBrandRepository.findById(brand_id).get();
 
 		if (vehicle != null && vehicle.isDeleted() == false) // if vehicle id is present and vehicle status is not
-																// deleted then the method will get accessed.
+														     // deleted then the method will get accessed.
 		{
 			vehicle.setDeleted(true);
 			vehicleBrandRepository.save(vehicle);// if vehicle is is present it will get deleted , hence
-			// cancelled.
+			                                     // cancelled.
 			return "Vehicle Brand Deleted!";
 		} else {
 			throw new BrandNotFoundException("Incorrect Brand Id! Enter correct Id!");
