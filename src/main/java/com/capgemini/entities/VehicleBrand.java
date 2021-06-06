@@ -23,7 +23,7 @@ public class VehicleBrand {
 	private boolean isDeleted=false;
 
 	@OneToMany(mappedBy = "vehicleBrand")
-	@JsonManagedReference
+	@JsonBackReference
 	private List<Vehicle> vehicle = new ArrayList<>();
 	
 

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,7 @@ public class VehicleController {
 	@Autowired
 	VehicleBrandRepository vehicleBrandRepository;
 
-	@PostMapping("/add/{brand_id}")
+	@PostMapping("/{brand_id}")
 	public String addVehicle(@RequestBody Vehicle vehicle, @PathVariable int brand_id) {
 
 		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
@@ -46,7 +47,7 @@ public class VehicleController {
 		}
 	}
 
-	@PutMapping("/update/{vehicleId}/brand/{brand_id}")
+	@PutMapping("/{vehicleId}/brand/{brand_id}")
 	public String updateVehicle(@RequestBody Vehicle v, @PathVariable int vehicleId, @PathVariable int brand_id)
 			throws VehicleIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
@@ -71,7 +72,7 @@ public class VehicleController {
 
 	}
 
-	@PutMapping("/delete/{vehicleId}")
+	@DeleteMapping("/{vehicleId}")
 	public String removeVehicle(@PathVariable int vehicleId) throws VehicleIdNotFoundException {
 
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
@@ -91,54 +92,10 @@ public class VehicleController {
 
 	}
 
-	@GetMapping("/search/name/{vehicleName}")
-	public ResponseEntity<List<Vehicle>> searchVehicleByName(@PathVariable String vehicleName)
-			throws ListIsEmptyException {
-		List<Vehicle> vehicle = vehicleRepository.findByVehicleName(vehicleName);
-		if (vehicle.size() != 0) { // condition updated
-			return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
-		} else {
-			throw new ListIsEmptyException("Vehicle name is not present.");
-		}
-	}
-
-	@GetMapping("/search/type/{vehicleType}")
-	public ResponseEntity<List<Vehicle>> searchVehicleByType(@PathVariable String vehicleType)
-			throws ListIsEmptyException {
-		List<Vehicle> vehicle = vehicleRepository.findByVehicleType(vehicleType);
-		if (vehicle.size() != 0) {
-			return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
-		} else {
-			throw new ListIsEmptyException("Vehicle type is not present.");
-		}
-	}
-
-	@GetMapping("/search/location/{vehicleLocation}")
-	public ResponseEntity<List<Vehicle>> searchVehicleByLocation(@PathVariable String vehicleLocation)
-			throws ListIsEmptyException {
-		List<Vehicle> vehicle = vehicleRepository.findByVehicleLocation(vehicleLocation);
-		if (vehicle.size() != 0) {
-			return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
-		} else {
-			throw new ListIsEmptyException("Vehicle location is not present.");
-		}
-	}
-
-	@GetMapping("/search/seatCapacity/{numberOfSeats}")
-	public ResponseEntity<List<Vehicle>> searchVehicleBySeatCapacity(@PathVariable int numberOfSeats)
-			throws ListIsEmptyException {
-		List<Vehicle> vehicle = vehicleRepository.findByNumberOfSeats(numberOfSeats);
-		if (vehicle.size() != 0) {
-			return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
-		} else {
-			throw new ListIsEmptyException("Vehicle according to prefered seat not present.");
-		}
-	}
-
-	@GetMapping("/search/type/{vehicleType}/name/{vehicleName}")
-	public ResponseEntity<List<Vehicle>> searchVehicle(@PathVariable String vehicleType,
-			@PathVariable String vehicleName) throws ListIsEmptyException {
-		List<Vehicle> vehicle = vehicleRepository.findByVehicleTypeAndVehicleName(vehicleType, vehicleName);
+	@GetMapping("/name/{vehicleName}/type/{vehicleType}/color/{vehicleColor}/seats/{numberOfSeats}/location/{vehiclelocation}")
+	public ResponseEntity<List<Vehicle>> seacrhVehicleV1(@PathVariable String vehicleName,@PathVariable String vehicleType,
+			 @PathVariable String vehicleColor,@PathVariable int numberOfSeats,@PathVariable String vehiclelocation) throws ListIsEmptyException {
+		List<Vehicle> vehicle = vehicleRepository.findByVehicleNameAndVehicleTypeAndVehicleColorAndNumberOfSeatsAndVehicleLocation(vehicleName,vehicleType, vehicleColor, numberOfSeats,vehiclelocation);
 		if (vehicle.size() != 0) {
 			return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
 		} else {
@@ -146,19 +103,7 @@ public class VehicleController {
 		}
 	}
 
-	@GetMapping("/search/type/{vehicleType}/name/{vehicleName}/color/{vehicleColor}")
-	public ResponseEntity<List<Vehicle>> seacrhVehicleV1(@PathVariable String vehicleType,
-			@PathVariable String vehicleName, @PathVariable String vehicleColor) throws ListIsEmptyException {
-		List<Vehicle> vehicle = vehicleRepository.findByVehicleTypeAndVehicleNameAndVehicleColor(vehicleType,
-				vehicleName, vehicleColor);
-		if (vehicle.size() != 0) {
-			return new ResponseEntity<List<Vehicle>>(vehicle, HttpStatus.OK);
-		} else {
-			throw new ListIsEmptyException("Vehicle is not present.");
-		}
-	}
-
-	@GetMapping("/search/allVehicles")
+	@GetMapping("/allVehicles")
 	public ResponseEntity<List<Vehicle>> searchAllVehicle() throws ListIsEmptyException {
 		List<Vehicle> vehicle = vehicleRepository.findAll();
 		if (vehicle.size() != 0) {
@@ -168,4 +113,13 @@ public class VehicleController {
 		}
 	}
 
+	@GetMapping("/{id}")
+	public ResponseEntity<Vehicle> searchVehicleById(@PathVariable int id) throws ListIsEmptyException {
+		Vehicle vehicle = vehicleRepository.findById(id).get();
+		if (vehicle!= null) {
+			return new ResponseEntity<Vehicle>(vehicle, HttpStatus.OK);
+		} else {
+			throw new ListIsEmptyException("No vehicle is registered.");
+		}
+	}
 }

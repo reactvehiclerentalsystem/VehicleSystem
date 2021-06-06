@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
@@ -27,14 +28,14 @@ public class Vehicle {
 	private String vehicleType;
 	private String vehicleColor;
 	private String vehicleLocation;
-	@Column(length = 2)
 	private int numberOfSeats;
 	private double dailyPrice;
-	private boolean isAvailable; // specifies availability of vehicle!
-	private boolean isDeleted; //specifies whether the vehicle is removed from database.
-
+	private boolean isAvailable=true; // specifies availability of vehicle!
+	private boolean isDeleted=false; //specifies whether the vehicle is removed from database.
+	private String picture;
+	
 	@ManyToOne
-	@JsonBackReference
+	@JsonManagedReference
 	@JoinColumn(name = "brand_id", referencedColumnName = "brand_id")
 	private VehicleBrand vehicleBrand;
 }

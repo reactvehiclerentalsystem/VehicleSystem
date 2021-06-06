@@ -1,6 +1,8 @@
 
 package com.capgemini.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +33,7 @@ public class VehicleBrandController {
 	@Autowired
 	VehicleRepository vehicleRepository;
 
-	@PostMapping("/create/")
+	@PostMapping("/")
 	public ResponseEntity<String> createBrand(@RequestBody VehicleBrand vehicleBrand) {
 
 		vehicleBrand.setDeleted(false);
@@ -40,7 +42,7 @@ public class VehicleBrandController {
 		return new ResponseEntity<>("Brand Added", HttpStatus.OK);
 	}
 
-	@PutMapping("/update/{brand_id}")
+	@PutMapping("/{brand_id}")
 	public ResponseEntity<String> updateBrand(@PathVariable int brand_id, @RequestBody VehicleBrand vehicleBrand)
 			throws BrandNotFoundException {
 
@@ -55,7 +57,7 @@ public class VehicleBrandController {
 		}
 	}
 
-	@PutMapping("/delete/{brand_id}")
+	@DeleteMapping("/{brand_id}")
 	public String deleteBrand(@PathVariable int brand_id) {
 
 		VehicleBrand vehicle = vehicleBrandRepository.findById(brand_id).get();
@@ -70,5 +72,10 @@ public class VehicleBrandController {
 		} else {
 			throw new BrandNotFoundException("Incorrect Brand Id! Enter correct Id!");
 		}
+	}
+	@GetMapping("/")
+	public ResponseEntity<List<VehicleBrand>> getAllbrand(){
+		List<VehicleBrand> v=vehicleBrandRepository.findAll();
+		return new ResponseEntity<List<VehicleBrand>>(v,HttpStatus.OK);
 	}
 }
