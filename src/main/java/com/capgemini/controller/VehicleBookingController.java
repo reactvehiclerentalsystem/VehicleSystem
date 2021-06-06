@@ -6,10 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +25,7 @@ import com.capgemini.repository.VehicleBookingRepository;
 import com.capgemini.repository.VehicleRepository;
 
 @RestController
-@RequestMapping("/api/booking")
+@RequestMapping("/bookings")
 public class VehicleBookingController {
 
 	@Autowired
@@ -35,7 +35,7 @@ public class VehicleBookingController {
 	@Autowired
 	private UserInfoRepository userInfoRepository;
 
-	@PostMapping("/book/vehicle{vehicleId}/user/{userId}")
+	@PostMapping("/vehicle/{vehicleId}/user/{userId}")
 	public String bookVehicle(@RequestBody VehicleBooking vehicleBooking, @PathVariable int vehicleId,
 			@PathVariable int userId) throws VehicleIdNotFoundException, UserIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
@@ -61,7 +61,7 @@ public class VehicleBookingController {
 		return "Vehicle Booked!";
 	}
 
-	@PutMapping("/cancel/{bookingId}")
+	@DeleteMapping("/{bookingId}")
 	public String cancelBooking(@PathVariable int bookingId) throws VehicleIdNotFoundException {
 
 		VehicleBooking vehicleBooking = vehicleBookingRepository.findById(bookingId).get();
@@ -82,7 +82,7 @@ public class VehicleBookingController {
 
 	}
 
-	@GetMapping("/details/all")
+	@GetMapping("/")
 	public ResponseEntity<List<VehicleBooking>> bookingDetails() throws ListIsEmptyException {
 		List<VehicleBooking> vehicleBooking = vehicleBookingRepository.findAll();
 		if (vehicleBooking != null) {
@@ -92,7 +92,7 @@ public class VehicleBookingController {
 		}
 	}
 
-	@GetMapping("/details/{bookingId}")
+	@GetMapping("/{bookingId}")
 	public ResponseEntity<Optional<VehicleBooking>> bookingDetails(@PathVariable int bookingId)
 			throws ListIsEmptyException {
 		Optional<VehicleBooking> vehicleBooking = vehicleBookingRepository.findById(bookingId);
