@@ -19,6 +19,7 @@ import com.capgemini.entities.Vehicle;
 //import com.capgemini.entities.Vehicle;
 import com.capgemini.entities.VehicleBrand;
 import com.capgemini.exception.BrandNotFoundException;
+import com.capgemini.exception.ListIsEmptyException;
 import com.capgemini.exception.VehicleIdNotFoundException;
 import com.capgemini.repository.VehicleBrandRepository;
 import com.capgemini.repository.VehicleRepository;
@@ -37,9 +38,13 @@ public class VehicleBrandController {
 	public ResponseEntity<String> createBrand(@RequestBody VehicleBrand vehicleBrand) {
 
 		vehicleBrand.setDeleted(false);
-		vehicleBrandRepository.save(vehicleBrand);
+		if (vehicleBrand.getBrand_name() == null || vehicleBrand.getBrand_name().isEmpty() == true) {
+			throw new BrandNotFoundException("Please Check the Name and Try again!!");
+		} else {
+			vehicleBrandRepository.save(vehicleBrand);
 
-		return new ResponseEntity<>("Brand Added", HttpStatus.OK);
+			return new ResponseEntity<>("Brand Added", HttpStatus.OK);
+		}
 	}
 
 	@PutMapping("/{brand_id}")
@@ -47,11 +52,12 @@ public class VehicleBrandController {
 			throws BrandNotFoundException {
 
 		VehicleBrand v = vehicleBrandRepository.findById(brand_id).get();
-		if (v.isDeleted() == false) {
+		if (vehicleBrand.getBrand_name() == null || vehicleBrand.getBrand_name().isEmpty() == true) {
+			throw new BrandNotFoundException("Please Check the Name and Try again!!");
+		} else if (v.isDeleted() == false || vehicleBrandRepository.existsById(brand_id)) {
 			v.setBrand_name(vehicleBrand.getBrand_name());
 			vehicleBrandRepository.save(v);
 			return new ResponseEntity<>("Brand Updated", HttpStatus.OK);
-
 		} else {
 			throw new BrandNotFoundException("Brand Not Found!!");
 		}
@@ -63,19 +69,31 @@ public class VehicleBrandController {
 		VehicleBrand vehicle = vehicleBrandRepository.findById(brand_id).get();
 
 		if (vehicle != null && vehicle.isDeleted() == false) // if vehicle id is present and vehicle status is not
-														     // deleted then the method will get accessed.
+																// deleted then the method will get accessed.
 		{
 			vehicle.setDeleted(true);
 			vehicleBrandRepository.save(vehicle);// if vehicle is is present it will get deleted , hence
-			                                     // cancelled.
+													// cancelled.
 			return "Vehicle Brand Deleted!";
 		} else {
 			throw new BrandNotFoundException("Incorrect Brand Id! Enter correct Id!");
 		}
 	}
+
+	@GetMapping("/id/{brand_id}")
+	public VehicleBrand findById(@PathVariable int brand_id) {
+		VehicleBrand v = vehicleBrandRepository.findById(brand_id).get();
+		if (v.isDeleted() == true || !vehicleBrandRepository.existsById(brand_id)) {
+			throw new BrandNotFoundException("Incorrect Brand Id! Enter correct Id!");
+		} else {
+			return v;
+		}
+	}
+	
 	@GetMapping("/")
-	public ResponseEntity<List<VehicleBrand>> getAllbrand(){
+	public ResponseEntity<List<VehicleBrand>> getAllbrand() {
 		List<VehicleBrand> v=vehicleBrandRepository.findAll();
 		return new ResponseEntity<List<VehicleBrand>>(v,HttpStatus.OK);
 	}
+
 }
