@@ -37,6 +37,12 @@ public class UserInfoController {
 		userInfoRepository.save(user);
 		return "added";
 	}
+	
+	@PostMapping("/login")
+	public UserInfo loginVerify(@RequestBody UserInfo user) {
+		UserInfo u=userInfoRepository.findByUserEmailAndUserPassword(user.getUserEmail(), user.getUserPassword());
+		return u;
+	}
 
 	@GetMapping("/user/{id}")
 	public ResponseEntity<Optional<UserInfo>> findById(@PathVariable int id) throws UserIdNotFoundException {
