@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,7 @@ import com.capgemini.repository.VehicleRepository;
 
 @RestController
 @RequestMapping("/api/admin/")
+@CrossOrigin
 public class AdminController {
 
 	@Autowired
@@ -70,6 +72,12 @@ public class AdminController {
 	public String create(@RequestBody Admin admin) {
 		adminRepository.save(admin);
 		return "Record Added:";
+	}
+	
+	@PostMapping("/login")
+	public Admin loginVerify(@RequestBody Admin admin) {
+		Admin a = adminRepository.findByEmailAndPassword(admin.getEmail(), admin.getPassword());
+		return a;
 	}
 
 	@PostMapping("/postvehicle/{brand_id}")
