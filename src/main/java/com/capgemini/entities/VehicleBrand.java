@@ -17,14 +17,13 @@ public class VehicleBrand {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int brand_id;
-	
+
 	@Column(nullable = false, unique = true)
 	private String brand_name;
-	private boolean isDeleted=false;
+	private boolean isDeleted = false;
 
 	@OneToMany(mappedBy = "vehicleBrand")
-	@JsonBackReference
+	@JsonManagedReference
 	private List<Vehicle> vehicle = new ArrayList<>();
-	
 
 }

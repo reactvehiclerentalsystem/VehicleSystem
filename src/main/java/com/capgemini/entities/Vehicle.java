@@ -35,7 +35,7 @@ public class Vehicle {
 	private String picture;
 	
 	@ManyToOne
-	@JsonManagedReference
+	@JsonBackReference
 	@JoinColumn(name = "brand_id", referencedColumnName = "brand_id")
 	private VehicleBrand vehicleBrand;
 }
