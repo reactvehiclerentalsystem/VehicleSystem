@@ -23,6 +23,7 @@ public class VehicleBooking {
 	private String bookingEndDate;
 	private boolean isCancelled; //specifies the status of booking , whether it is cancelled or not.
 
+	//Mapping starts..
 	@OneToOne 
 	@JoinColumn(name = "vehicleId", referencedColumnName = "vehicleId")
 	private Vehicle vehicle;
