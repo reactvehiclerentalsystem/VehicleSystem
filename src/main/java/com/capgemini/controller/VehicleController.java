@@ -49,11 +49,11 @@ public class VehicleController {
 		}
 	}
 
-	@PutMapping("/{vehicleId}/brand/{brand_id}")
-	public String updateVehicle(@RequestBody Vehicle v, @PathVariable int vehicleId, @PathVariable int brand_id)
+	@PutMapping("/{vehicleId}")   ///brand/{brand_id}
+	public String updateVehicle(@RequestBody Vehicle v, @PathVariable int vehicleId) //, @PathVariable int brand_id
 			throws VehicleIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
-		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
+//		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
 		if (vehicle != null && vehicle.isDeleted() == false) {
 			vehicle.setVehiclePlateNumber(v.getVehiclePlateNumber());
 			vehicle.setVehicleName(v.getVehicleName());
@@ -63,7 +63,7 @@ public class VehicleController {
 			vehicle.setNumberOfSeats(v.getNumberOfSeats());
 			vehicle.setDailyPrice(v.getDailyPrice());
 			vehicle.setAvailable(true);
-			vehicle.setVehicleBrand(vehicleBrand);
+//			vehicle.setVehicleBrand(vehicleBrand);
 			vehicle.setDeleted(false);
 			vehicleRepository.save(vehicle);
 			return "Vehicle Updated!";
