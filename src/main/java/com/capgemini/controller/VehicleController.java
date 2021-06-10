@@ -49,11 +49,11 @@ public class VehicleController {
 		}
 	}
 
-	@PutMapping("/{vehicleId}/brand/{brand_id}")
-	public String updateVehicle(@RequestBody Vehicle v, @PathVariable int vehicleId, @PathVariable int brand_id)
+	@PutMapping("/{vehicleId}")  ///brand/{brand_id}
+	public String updateVehicle(@RequestBody Vehicle v, @PathVariable int vehicleId) //, @PathVariable int brand_id
 			throws VehicleIdNotFoundException {
 		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
-		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
+//		VehicleBrand vehicleBrand = vehicleBrandRepository.findById(brand_id).get();
 		if (vehicle != null && vehicle.isDeleted() == false) {
 			vehicle.setVehiclePlateNumber(v.getVehiclePlateNumber());
 			vehicle.setVehicleName(v.getVehicleName());
@@ -63,7 +63,7 @@ public class VehicleController {
 			vehicle.setNumberOfSeats(v.getNumberOfSeats());
 			vehicle.setDailyPrice(v.getDailyPrice());
 			vehicle.setAvailable(true);
-			vehicle.setVehicleBrand(vehicleBrand);
+//			vehicle.setVehicleBrand(vehicleBrand);
 			vehicle.setDeleted(false);
 			vehicleRepository.save(vehicle);
 			return "Vehicle Updated!";
@@ -115,9 +115,9 @@ public class VehicleController {
 		}
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Vehicle> searchVehicleById(@PathVariable int id) throws ListIsEmptyException {
-		Vehicle vehicle = vehicleRepository.findById(id).get();
+	@GetMapping("/{vehicleId}")
+	public ResponseEntity<Vehicle> searchVehicleById(@PathVariable int vehicleId) throws ListIsEmptyException {
+		Vehicle vehicle = vehicleRepository.findById(vehicleId).get();
 		if (vehicle!= null) {
 			return new ResponseEntity<Vehicle>(vehicle, HttpStatus.OK);
 		} else {
