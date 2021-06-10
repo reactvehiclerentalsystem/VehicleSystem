@@ -45,7 +45,9 @@ public class VehicleBookingController {
 
 		if (vehicle == null) {
 			throw new VehicleIdNotFoundException("Vehicle Not Found!!");
-		} else if (vehicle.isDeleted() == true && vehicle.isAvailable() == false) {
+		} else if (vehicle.isAvailable() == false) {
+			throw new VehicleIdNotFoundException("Vehicle is currently unavailable!!");}
+		else if (vehicle.isDeleted() == true && vehicle.isAvailable() == false) {
 			throw new VehicleIdNotFoundException("Vehicle is currently unavailable!!");
 		} else if (userInfo.isDeleted() == true) {
 			throw new UserIdNotFoundException("Invalid User Id!!");
