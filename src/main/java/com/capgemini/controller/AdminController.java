@@ -1,5 +1,6 @@
 package com.capgemini.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -286,13 +287,22 @@ public class AdminController {
 
 	//ADMIN DASHBOARD
 	
-	@GetMapping("/get/totalregistereduser/")
-	public String countTotalRegUser() {
+	@GetMapping("/total")
+	public List<Long> countTotalRegUser() {
 		long count = userInfoRepository.count();
-		return "total registered user: " + count;
+		long count1 = vehicleBookingRepository.count();
+		long count2 = queriesRepository.count();
+		long count3 = testimonialRepository.count();
+		
+		List<Long> list = new ArrayList<>();
+		list.add(count);
+		list.add(count1);
+		list.add(count2);
+		list.add(count3);
+		return list;
 	}
 
-	@GetMapping("/get/totalvehiclebooking/")
+	/*@GetMapping("/get/totalvehiclebooking/")
 	public String countTotalBooking() {
 		long count = vehicleBookingRepository.count();
 		return "total vehicle booking: " + count;
@@ -308,5 +318,5 @@ public class AdminController {
 	public String countTotalTestimonial() {
 		long count = testimonialRepository.count();
 		return "total testimonial: " + count;
-	}
+	}*/
 }
